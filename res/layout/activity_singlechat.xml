@@ -1,0 +1,119 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+	<RelativeLayout
+        android:id="@+id/singlechat_layout_header"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@color/black">
+		<RelativeLayout
+	        android:id="@+id/singlechat_layout_close"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp"
+			android:layout_centerVertical="true">
+			<ImageView
+			    android:id="@+id/singlechat_image_close"
+			    android:layout_width="20dp"
+			    android:layout_height="20dp"
+			    android:layout_centerVertical="true"
+			    android:src="@drawable/arrow_left"
+			    android:scaleType="fitXY" />
+			<TextView
+			    android:id="@+id/singlechat_label_close"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_toRightOf="@id/singlechat_image_close"
+			    android:layout_centerVertical="true"
+			    android:layout_marginLeft="2dp"
+			    android:text="返回"
+			    android:textColor="@color/white"
+			    android:textSize="18sp" />
+		</RelativeLayout>
+		<TextView
+            android:id="@+id/singlechat_label_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="聊天"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+		<ImageView
+		    android:id="@+id/singlechat_image_user"
+		    android:layout_width="20dp"
+		    android:layout_height="20dp"
+		    android:layout_alignParentRight="true"
+			android:layout_marginRight="10dp"
+		    android:layout_centerVertical="true"
+		    android:src="@drawable/icon_user"
+		    android:scaleType="fitXY" />
+	</RelativeLayout>
+	<RelativeLayout
+        android:id="@+id/singlechat_layout_tail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+		<ImageView
+		    android:id="@+id/singlechat_image_divider"
+		    android:layout_width="fill_parent"
+		    android:layout_height="1dp"
+		    android:layout_alignParentTop="true"
+		    android:src="@color/grey_line" />
+		<RelativeLayout
+	        android:id="@+id/singlechat_layout_input"
+	        android:layout_width="fill_parent"
+	        android:layout_height="46dp"
+	        android:layout_below="@id/singlechat_image_divider"
+	        android:background="@color/grey_bg">
+			<ImageButton
+			    android:id="@+id/singlechat_image_mode"
+			    android:layout_width="30dp"
+			    android:layout_height="30dp"
+			    android:layout_alignParentLeft="true"
+			    android:layout_marginLeft="10dp"
+			    android:layout_centerVertical="true"
+			    android:scaleType="fitXY"
+			    android:background="@drawable/selector_chat_input_voice" />
+			<ImageButton
+			    android:id="@+id/singlechat_image_more"
+			    android:layout_width="30dp"
+			    android:layout_height="30dp"
+			    android:layout_alignParentRight="true"
+			    android:layout_marginRight="10dp"
+			    android:layout_centerVertical="true"
+			    android:scaleType="fitXY"
+			    android:background="@drawable/selector_chat_more" />
+			<ImageButton
+			    android:id="@+id/singlechat_image_emoticon"
+			    android:layout_width="30dp"
+			    android:layout_height="30dp"
+			    android:layout_toLeftOf="@id/singlechat_image_more"
+			    android:layout_marginRight="10dp"
+			    android:layout_centerVertical="true"
+			    android:scaleType="fitXY"
+			    android:background="@drawable/selector_chat_emoticon" />
+			<EditText
+			    android:id="@+id/singlechat_text_text"
+			    android:layout_width="fill_parent"
+			    android:layout_height="36dp"
+			    android:layout_toRightOf="@id/singlechat_image_mode"
+			    android:layout_toLeftOf="@id/singlechat_image_emoticon"
+			    android:layout_marginLeft="8dp"
+			    android:layout_marginRight="8dp"
+			    android:layout_centerVertical="true"
+			    android:background="@drawable/text"
+			    android:paddingLeft="10dp"
+			    android:paddingRight="10dp" 
+			    android:text=""
+			    android:textColor="@color/black"
+			    android:textSize="17sp" />
+		</RelativeLayout>
+		<FrameLayout
+	        android:id="@+id/singlechat_layout_panel" 
+	        android:layout_width="fill_parent" 
+	        android:layout_height="wrap_content" 
+	        android:layout_below="@id/singlechat_layout_input" />
+	</RelativeLayout>
+</RelativeLayout>

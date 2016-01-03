@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocols domain="service.wehop.cn" mock="false" storage="grunt\image\">
+	<protocol name="image">
+	    <url>
+<![CDATA[
+[0]
+]]>
+        </url>
+	    <mock></mock>
+	</protocol>
+	<protocol name="file">
+	    <url>
+<![CDATA[
+[1]
+]]>
+        </url>
+	    <mock></mock>
+	</protocol>
+</protocols>

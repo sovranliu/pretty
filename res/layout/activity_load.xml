@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <Button
+        android:id="@+id/load_button_1"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:background="#00000000"
+		android:text="1"
+		android:textColor="@color/black">
+	</Button>
+    <Button
+        android:id="@+id/load_button_2"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:layout_below="@id/load_button_1"
+		android:background="#00000000"
+		android:text="2"
+		android:textColor="@color/black">
+	</Button>
+</RelativeLayout>
