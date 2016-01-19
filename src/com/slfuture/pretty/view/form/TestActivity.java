@@ -1,14 +1,10 @@
 package com.slfuture.pretty.view.form;
 
 import com.slfuture.pretty.R;
-import com.slfuture.pretty.im.view.SingleChatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.slfuture.pluto.view.annotation.ResourceView;

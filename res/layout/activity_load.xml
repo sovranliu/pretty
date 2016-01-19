@@ -20,4 +20,13 @@
 		android:text="2"
 		android:textColor="@color/black">
 	</Button>
+    <Button
+        android:id="@+id/load_button_3"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:layout_below="@id/load_button_2"
+		android:background="#00000000"
+		android:text="3"
+		android:textColor="@color/black">
+	</Button>
 </RelativeLayout>

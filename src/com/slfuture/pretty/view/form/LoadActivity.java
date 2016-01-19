@@ -20,6 +20,8 @@ public class LoadActivity extends ActivityEx {
 	public Button btn1;
 	@ResourceView(id=R.id.load_button_2)
 	public Button btn2;
+	@ResourceView(id=R.id.load_button_3)
+	public Button btn3;
 	
 	/**
 	 * 界面创建
@@ -39,6 +41,13 @@ public class LoadActivity extends ActivityEx {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoadActivity.this, TestActivity.class);
+				LoadActivity.this.startActivity(intent);
+			}
+		});
+		btn3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(LoadActivity.this, ImageActivity.class);
 				LoadActivity.this.startActivity(intent);
 			}
 		});
