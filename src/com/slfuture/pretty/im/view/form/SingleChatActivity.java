@@ -1,4 +1,4 @@
-package com.slfuture.pretty.im.view;
+package com.slfuture.pretty.im.view.form;
 
 import com.slfuture.pretty.R;
 

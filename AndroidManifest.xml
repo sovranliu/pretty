@@ -23,8 +23,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.slfuture.pretty.view.form.TestActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-		<activity android:name="com.slfuture.pretty.im.view.SingleChatActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-		<activity android:name="com.slfuture.pretty.view.form.ImageActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-		<activity android:name="com.slfuture.pretty.view.form.ImageActivity2" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+		<activity android:name="com.slfuture.pretty.im.view.form.SingleChatActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+		<activity android:name="com.slfuture.pretty.general.view.form.ImageActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 	</application>
 </manifest>

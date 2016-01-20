@@ -1,7 +1,8 @@
 package com.slfuture.pretty.view.form;
 
 import com.slfuture.pretty.R;
-import com.slfuture.pretty.im.view.SingleChatActivity;
+import com.slfuture.pretty.general.view.form.ImageActivity;
+import com.slfuture.pretty.im.view.form.SingleChatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ public class LoadActivity extends ActivityEx {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(LoadActivity.this, ImageActivity.class);
+				intent.putExtra("path", "/storage/emulated/0/pretty/image/bd_logo1.png");
+				intent.putExtra("url", "http://www.slfuture.com/home/images/background.jpg");
 				LoadActivity.this.startActivity(intent);
 			}
 		});

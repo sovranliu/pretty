@@ -3,13 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
     <ImageView
         android:id="@+id/image_image_image"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="centerInside"
-        android:layout_centerInParent="true"
-        android:src="@drawable/chat_location" >
+        android:layout_centerInParent="true">
 	</ImageView>
 </RelativeLayout>
