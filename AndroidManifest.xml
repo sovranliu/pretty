@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.slfuture.pretty" android:versionCode="1" android:versionName="1.0.0">	
-	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>	
+	<uses-sdk android:minSdkVersion="10" android:targetSdkVersion="17"/>	
 	<uses-permission android:name="android.permission.INTERNET"/>	
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>	
 	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>	
@@ -10,6 +10,7 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>	
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>	
 	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-feature android:name="android.hardware.camera" />
 	<uses-feature android:name="android.hardware.camera.autofocus" />
@@ -23,6 +24,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.slfuture.pretty.view.form.TestActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+		<activity android:name="com.slfuture.pretty.view.form.TestListViewActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.im.view.form.SingleChatActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.general.view.form.ImageActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 	</application>

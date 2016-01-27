@@ -23,6 +23,8 @@ public class LoadActivity extends ActivityEx {
 	public Button btn2;
 	@ResourceView(id=R.id.load_button_3)
 	public Button btn3;
+	@ResourceView(id=R.id.load_button_4)
+	public Button btn4;
 	
 	/**
 	 * 界面创建
@@ -51,6 +53,13 @@ public class LoadActivity extends ActivityEx {
 				Intent intent = new Intent(LoadActivity.this, ImageActivity.class);
 				intent.putExtra("path", "/storage/emulated/0/pretty/image/bd_logo1.png");
 				intent.putExtra("url", "http://www.slfuture.com/home/images/background.jpg");
+				LoadActivity.this.startActivity(intent);
+			}
+		});
+		btn4.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(LoadActivity.this, TestListViewActivity.class);
 				LoadActivity.this.startActivity(intent);
 			}
 		});
