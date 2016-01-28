@@ -132,4 +132,10 @@
 	        android:layout_height="wrap_content" 
 	        android:layout_below="@id/singlechat_layout_input" />
 	</RelativeLayout>
+	<FrameLayout
+        android:id="@+id/singlechat_layout_messages" 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/singlechat_layout_header"
+        android:layout_above="@id/singlechat_layout_tail" />
 </RelativeLayout>

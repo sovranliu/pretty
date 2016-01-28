@@ -44,10 +44,11 @@ public class SingleChatActivity extends ActivityEx {
 	public Button btnSound;
 	
 	public ChatMoreFragment frgChatMore = null;
+	public ChatMessagesFragment frgChatMessages = null;
 	
 	public SoundRecorder recorder = null;
 
-	
+
 	/**
 	 * 界面创建
 	 */
@@ -73,6 +74,13 @@ public class SingleChatActivity extends ActivityEx {
 				}
 			}
 		});
+		//
+		FragmentManager fm = getFragmentManager();  
+        FragmentTransaction transaction = fm.beginTransaction();
+        frgChatMessages = new ChatMessagesFragment();
+        transaction.replace(R.id.singlechat_layout_messages, frgChatMessages);
+        transaction.commit();
+        //
 		btnSound.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {

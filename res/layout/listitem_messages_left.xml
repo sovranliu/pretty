@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white">
+	<ImageView
+	    android:id="@+id/messagesleft_image_photo"
+	    android:layout_width="50dp"
+	    android:layout_height="50dp"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:scaleType="fitXY"
+	    android:src="@drawable/chat_photo_default" />
+	<TextView
+	    android:id="@+id/messagesleft_label_message"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_toRightOf="@id/messagesleft_image_photo"
+	    android:background="@drawable/messagesleft_bg"
+	    android:text="你好世界\n" 
+	    android:textSize="16sp"
+	    android:visibility="gone" />
+	<ImageView
+	    android:id="@+id/messagesleft_image_message"
+	    android:layout_width="100dp"
+	    android:layout_height="100dp"
+	    android:layout_marginLeft="5dp"
+		android:paddingLeft="14dp"
+	    android:scaleType="fitXY"
+	    android:layout_toRightOf="@id/messagesleft_image_photo"
+	    android:background="@drawable/messagesleft_bg"
+	    android:src="@drawable/icon_program" />
+</RelativeLayout>

@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/video_layout_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+	android:background="@color/black">
+	<SurfaceView
+        android:id="@+id/video_surface_opposite"
+        android:layout_gravity="center"
+	    android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+	<SurfaceView
+        android:id="@+id/video_surface_local"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_alignParentRight="true"
+	    android:layout_below="@+id/video_layout_head" />
+	<ImageView
+	    android:id="@+id/video_image_photo"
+	    android:layout_width="100dp"
+	    android:layout_height="100dp"
+	    android:scaleType="fitXY"
+	    android:layout_centerHorizontal="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginTop="50dp"
+	    android:src="@drawable/demo_photo" />
+	<TextView
+	    android:id="@+id/video_label_name"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/video_image_photo"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="30dp"
+	    android:text="私人医生"
+	    android:textColor="@color/white"
+	    android:textSize="18sp" />
+	<TextView
+	    android:id="@+id/video_label_description"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/video_label_name"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="10dp"
+	    android:text="通话时长 00:05:10"
+	    android:textColor="@color/grey"
+	    android:textSize="15sp" />
+	<LinearLayout
+	    android:id="@+id/video_layout_operation"
+	    android:layout_width="match_parent"
+	    android:layout_height="100dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="50dp"
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginRight="20dp"
+	    android:orientation="horizontal" >
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" >
+			<ImageView
+			    android:id="@+id/video_image_mute"
+	            android:layout_width="60dp"
+	            android:layout_height="60dp"
+	            android:layout_centerInParent="true"
+	            android:scaleType="fitXY"
+				android:src="@drawable/icon_mute_normal" />
+		</RelativeLayout>
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" >
+			<ImageView
+	            android:id="@+id/video_image_handup"
+	            android:layout_width="60dp"
+	            android:layout_height="60dp"
+	            android:layout_centerInParent="true"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/ring_icon_handup" />
+		</RelativeLayout>
+		<RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+			android:layout_weight="1">
+			<ImageView
+			    android:id="@+id/video_image_speaker"
+	            android:layout_width="60dp"
+	            android:layout_height="60dp"
+	            android:layout_centerInParent="true"
+	            android:scaleType="fitXY"
+				android:src="@drawable/icon_speaker_normal" />
+		</RelativeLayout>
+	</LinearLayout>
+</RelativeLayout>

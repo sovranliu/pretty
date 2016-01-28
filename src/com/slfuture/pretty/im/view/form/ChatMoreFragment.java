@@ -1,16 +1,10 @@
 package com.slfuture.pretty.im.view.form;
 
-import java.lang.reflect.Field;
-
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
 import com.slfuture.pretty.R;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 /**
@@ -29,35 +23,13 @@ public class ChatMoreFragment extends FragmentEx {
 
 
 	/**
-	 * 界面创建
+	 * 是否附着到根视图
+	 * 
+	 * @return 是否附着到根视图
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		com.slfuture.pluto.view.annotation.ResourceView activityView = this.getClass().getAnnotation(com.slfuture.pluto.view.annotation.ResourceView.class);
-		if(null == activityView) {
-			return super.onCreateView(inflater, container, savedInstanceState);
-		}
-		else {
-			// Activity
-			View result = inflater.inflate(activityView.id(), container, false);
-			// Control
-			for(Field field : this.getClass().getFields()) {
-				com.slfuture.pluto.view.annotation.ResourceView controlView = field.getAnnotation(com.slfuture.pluto.view.annotation.ResourceView.class);
-				if(null == controlView) {
-					continue;
-				}
-				try {
-					field.set(this, result.findViewById(controlView.id()));
-				}
-				catch (IllegalAccessException e) {
-					Log.e("pluto", "FragmentEx.onCreate() failed", e);
-				}
-				catch (IllegalArgumentException e) {
-					Log.e("pluto", "FragmentEx.onCreate() failed", e);
-				}
-			}
-			return result;
-		}
+	protected boolean attachToRoot() {
+		return false;
 	}
 	
 	/**

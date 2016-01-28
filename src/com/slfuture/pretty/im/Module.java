@@ -1,19 +1,123 @@
 package com.slfuture.pretty.im;
 
-import com.slfuture.carrie.base.model.core.IModule;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
+
+import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.pluto.etc.Controller;
+import com.slfuture.pretty.im.core.IReactor;
+import com.slfuture.pretty.im.view.form.RingActivity;
 
 /**
  * 即时通信模块
  */
-public class Module implements IModule {
-	@Override
-	public boolean initialize() {
-		// TODO Auto-generated method stub
-		return false;
+public class Module {
+	/**
+	 * 未知类型通话
+	 */
+	public final static int DIAL_TYPE_UNKNOWN = 0;
+	/**
+	 * 语音通话
+	 */
+	public final static int DIAL_TYPE_AUDIO = 1;
+	/**
+	 * 视频通话
+	 */
+	public final static int DIAL_TYPE_VIDEO = 2;
+
+
+	/**
+	 * 上下文
+	 */
+	public static Context context = null;
+	/**
+	 * 回调接口
+	 */
+	public static IReactor reactor = null;
+	/**
+	 * 呼叫接收器
+	 */
+	public static BroadcastReceiver dialReceiver = null;
+
+
+    /**
+     * 初始化
+     *
+     * @return 是否初始化成功
+     */
+	public static boolean initialize() {
+		EMChat.getInstance().init(context);
+		EMChat.getInstance().setDebugMode(true);
+		//
+		dialReceiver = new BroadcastReceiver() {
+           	@Override
+           	public void onReceive(Context context, Intent intent) {
+           		String from = intent.getStringExtra("from");
+           		String type = intent.getStringExtra("type");
+           		Intent ringIntent = new Intent(context, RingActivity.class);
+           		ringIntent.putExtra("id", from);
+           		ringIntent.putExtra("userName", "医生热线");
+           		ringIntent.putExtra("type", type);
+           		context.startActivity(ringIntent);
+           	}
+        };
+        context.registerReceiver(dialReceiver, new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction()));
+        return true;
 	}
 
-	@Override
-	public void terminate() {
-		
+    /**
+     * 终止
+     */
+	public static void terminate() {
+		if(null != dialReceiver) {
+			context.unregisterReceiver(dialReceiver);
+			dialReceiver = null;
+		}
+		context = null;
+    }
+	
+	/**
+	 * 登录服务器
+	 * 
+	 * @param account 帐号
+	 * @param password 密码
+	 * @param callback 回调
+	 */
+	public static void login(String account, String password, IEventable<Boolean> callback) {
+		Controller.doJoin(559, new IEventable<Boolean>() {
+			@Override
+			public void on(Boolean data) {
+				if(data) {
+					EMGroupManager.getInstance().loadAllGroups();
+					EMChatManager.getInstance().loadAllConversations();
+				}
+				else {
+					Toast.makeText(context, "即时通信登录失败", Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+		EMChatManager.getInstance().login(reactor.getAccount(), reactor.getPassword(), new EMCallBack() {
+			@Override
+			public void onSuccess() {
+				Log.d("pretty", "EMChatManager.login() success");
+				Controller.doMerge(559, true);
+			}
+			@Override
+			public void onProgress(int progress, String status) { }
+			@Override
+			public void onError(int code, String message) {
+				Log.d("pretty", "EMChatManager.login(" + code + ", '" + message + "') error");
+				Controller.doMerge(559, false);
+			}
+		});
 	}
 }

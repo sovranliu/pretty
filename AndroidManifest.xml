@@ -27,5 +27,9 @@
 		<activity android:name="com.slfuture.pretty.view.form.TestListViewActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.im.view.form.SingleChatActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.general.view.form.ImageActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+		
+        <!-- 环信相关 -->
+    	<meta-data android:name="EASEMOB_APPKEY"  android:value="wehopim#wehop" />
+    	<service android:name="com.easemob.chat.EMChatService" />
 	</application>
 </manifest>
