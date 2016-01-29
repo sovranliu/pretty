@@ -13,7 +13,6 @@
  */
 package com.slfuture.pretty.im.utility;
 
-import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;

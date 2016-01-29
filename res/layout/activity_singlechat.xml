@@ -108,6 +108,8 @@
 			    android:paddingRight="10dp" 
 			    android:text=""
 			    android:textColor="@color/black"
+			    android:imeOptions="actionDone"
+				android:singleLine="false"
 			    android:textSize="17sp" />
 			<Button
 			    android:id="@+id/singlechat_button_sound"

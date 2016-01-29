@@ -1,10 +1,17 @@
 package com.slfuture.pretty.im.view.form;
 
 import com.slfuture.carrie.base.type.List;
-import com.slfuture.carrie.base.type.Table;
+import com.slfuture.pluto.communication.Host;
+import com.slfuture.pluto.communication.response.ImageResponse;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
 import com.slfuture.pretty.R;
+import com.slfuture.pretty.im.Module;
+import com.slfuture.pretty.im.utility.message.AudioMessage;
+import com.slfuture.pretty.im.utility.message.VideoMessage;
+import com.slfuture.pretty.im.utility.message.ImageMessage;
+import com.slfuture.pretty.im.utility.message.TextMessage;
+import com.slfuture.pretty.im.utility.message.core.IMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -47,10 +54,10 @@ public class ChatMessagesFragment extends FragmentEx {
 		/**
 		 * 加载消息回调
 		 * 
-		 * @param messageId 指定截止消息ID，0表示最新消息
+		 * @param messageId 指定截止消息ID，null表示最新消息
 		 * @return 消息列表
 		 */
-		public List<Table<String, Object>> onLoad(int messageId);
+		public List<IMessage> onLoad(String messageId);
 		/**
 		 * 头像点击回调
 		 * 
@@ -65,20 +72,77 @@ public class ChatMessagesFragment extends FragmentEx {
 	 */
 	private class ViewHolder {
 		/**
-		 * 头像
-		 */
-		public ImageView photo;
-		/**
 		 * 文本
 		 */
 		public TextView text;
 		/**
+		 * 头像
+		 */
+		public ImageView photo;
+		/**
 		 * 图片
 		 */
 		public ImageView image;
+
+
+		/**
+		 * 渲染当前视图
+		 */
+		public void render(IMessage message) {
+			switch(message.type()) {
+			case IMessage.TYPE_TEXT:
+				text.setVisibility(View.VISIBLE);
+				text.setText(((TextMessage)message).text);
+				image.setVisibility(View.GONE);
+				break;
+			case IMessage.TYPE_IMAGE:
+				text.setVisibility(View.GONE);
+				image.setVisibility(View.VISIBLE);
+				ImageMessage imageMessage = (ImageMessage) message;
+				if(null != imageMessage.thumbnail) {
+					image.setImageBitmap(imageMessage.thumbnail);
+				}
+				else if(null != imageMessage.thumbnailUrl) {
+					Host.doImage("", new ImageResponse(imageMessage.thumbnailUrl) {
+						@Override
+						public void onFinished(Bitmap content) {
+							image.setImageBitmap(content);
+						}
+					}, imageMessage.thumbnailUrl);
+				}
+				else if(null != imageMessage.original) {
+					image.setImageBitmap(imageMessage.original);
+				}
+				else if(null != imageMessage.originalUrl) {
+					Host.doImage("", new ImageResponse(imageMessage.originalUrl) {
+						@Override
+						public void onFinished(Bitmap content) {
+							photo.setImageBitmap(content);
+						}
+					}, imageMessage.originalUrl);
+				}
+				break;
+			case IMessage.TYPE_SOUND:
+				text.setVisibility(View.VISIBLE);
+				text.setText("[短语音待处理...]");
+				image.setVisibility(View.GONE);
+				// TODO:短语音渲染处理
+				break;
+			case IMessage.TYPE_AUDIO:
+				text.setVisibility(View.VISIBLE);
+				text.setText(((AudioMessage) message).description());
+				image.setVisibility(View.GONE);
+				break;
+			case IMessage.TYPE_VIDEO:
+				text.setVisibility(View.VISIBLE);
+				text.setText(((VideoMessage) message).description());
+				image.setVisibility(View.GONE);
+				break;
+			}
+		}
 	}
 
-	
+
 	/**
 	 * 消息面板滚动
 	 */
@@ -132,11 +196,11 @@ public class ChatMessagesFragment extends FragmentEx {
 					if(View.VISIBLE == loading.getVisibility()) {
 						return false;
 					}
-					int messageId = 0;
+					String messageId = null;
 					if(messageList.size() > 0) {
-						messageId = (Integer) messageList.get(0).get("id");
+						messageId = messageList.get(0).id();
 					}
-					List<Table<String, Object>> list = chatMessageAdapter.onLoad(messageId);
+					List<IMessage> list = chatMessageAdapter.onLoad(messageId);
 					loading.setVisibility(View.GONE);
 					if(list.size() > 0) {
 						messageList.add(list);
@@ -179,53 +243,48 @@ public class ChatMessagesFragment extends FragmentEx {
         @SuppressLint("InflateParams")
 		@Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Table<String, Object> map = messageList.get(position);
-            final boolean isReceive = (Boolean) map.get("isReceive");
-            Bitmap photo = (Bitmap) map.get("photo");
-            String text = (String) map.get("text");
-            Bitmap image = (Bitmap) map.get("image");
+        	IMessage message = messageList.get(position);
         	ViewHolder holder = null;
             if(null == convertView) {
                 holder = new ViewHolder();
-                if(!isReceive) {
+                if(IMessage.ORIENTATION_SEND == message.orientation()) {
                 	convertView = inflater.inflate(R.layout.listitem_messages_right, null);
                     holder.photo = (ImageView)convertView.findViewById(R.id.messagesright_image_photo);
                     holder.text = (TextView)convertView.findViewById(R.id.messagesright_label_message);
                     holder.image = (ImageView)convertView.findViewById(R.id.messagesright_image_message);
                 }
-                else {
+                else if(IMessage.ORIENTATION_RECEIVE == message.orientation()) {
                 	convertView = inflater.inflate(R.layout.listitem_messages_left, null);
                     holder.photo = (ImageView)convertView.findViewById(R.id.messagesleft_image_photo);
                     holder.text = (TextView)convertView.findViewById(R.id.messagesleft_label_message);
                     holder.image = (ImageView)convertView.findViewById(R.id.messagesleft_image_message);
                 }
+                Bitmap photo = Module.reactor.getPhoto(message.from());
+                if(null != photo) {
+                	holder.photo.setImageBitmap(photo);
+                }
+                holder.photo.setTag(message.orientation());
+                holder.photo.setOnClickListener(new View.OnClickListener() {
+	                @Override
+	                public void onClick(View v) {
+	                	if(null == chatMessageAdapter) {
+	                		return;
+	                	}
+	                	// 展示原始图片
+	                	if(IMessage.ORIENTATION_RECEIVE == (Integer) v.getTag()) {
+	                    	chatMessageAdapter.onClick(IChatMessageAdapter.BUTTON_PHOTO_REMOTE);
+	                	}
+	                	else if(IMessage.ORIENTATION_SEND == (Integer) v.getTag()) {
+	                    	chatMessageAdapter.onClick(IChatMessageAdapter.BUTTON_PHOTO_LOCAL);
+	                	}
+	                }
+	            });
                 convertView.setTag(holder);
             }
             else {
                 holder = (ViewHolder)convertView.getTag();
             }
-            holder.photo.setImageBitmap(photo);
-            if(null == image) {
-            	holder.text.setText(text);
-            }
-            else {
-            	holder.image.setImageBitmap(image);
-            }
-            holder.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                	if(null == chatMessageAdapter) {
-                		return;
-                	}
-                	// 展示原始图片
-                	if(isReceive) {
-                    	chatMessageAdapter.onClick(IChatMessageAdapter.BUTTON_PHOTO_REMOTE);
-                	}
-                	else {
-                    	chatMessageAdapter.onClick(IChatMessageAdapter.BUTTON_PHOTO_LOCAL);
-                	}
-                }
-            });
+            holder.render(message);
             return convertView;
         }
     }
@@ -239,7 +298,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	/**
 	 * 数据列表
 	 */
-	private List<Table<String, Object>> messageList = new List<Table<String, Object>>();
+	private List<IMessage> messageList = new List<IMessage>();
 	/**
 	 * 消息源
 	 */
@@ -278,7 +337,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	 * 
 	 * @param message 消息映射
 	 */
-	public void addMessage(Table<String, Object> message) {
+	public void addMessage(IMessage message) {
 		messageList.add(message);
 		messagesAdapter.notifyDataSetChanged();
 	}
@@ -288,7 +347,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	 * 
 	 * @param messages 消息映射列表
 	 */
-	public void addMessage(List<Table<String, Object>> messages) {
+	public void addMessage(List<IMessage> messages) {
 		messageList.add(messages);
 		messagesAdapter.notifyDataSetChanged();
 	}
@@ -313,7 +372,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		loading.setVisibility(View.GONE);
 		messageList.clear();
 		if(null != chatMessageAdapter) {
-			messageList.add(chatMessageAdapter.onLoad(0));
+			messageList.add(chatMessageAdapter.onLoad(null));
 		}
 		messagesAdapter = new MessagesAdapter(this.getActivity());
 		listMessages.setAdapter(messagesAdapter);
