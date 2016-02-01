@@ -46,7 +46,7 @@ public class Module {
 	/**
 	 * 呼叫接收器
 	 */
-	public static BroadcastReceiver dialReceiver = null;
+	private static BroadcastReceiver dialReceiver = null;
 
 
     /**
@@ -84,24 +84,24 @@ public class Module {
 		}
 		context = null;
     }
-	
+
 	/**
 	 * 登录服务器
 	 * 
-	 * @param account 帐号
-	 * @param password 密码
 	 * @param callback 回调
 	 */
-	public static void login(String account, String password, IEventable<Boolean> callback) {
+	public static void login(final IEventable<Boolean> callback) {
 		Controller.doJoin(559, new IEventable<Boolean>() {
 			@Override
 			public void on(Boolean data) {
 				if(data) {
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
+					callback.on(true);
 				}
 				else {
 					Toast.makeText(context, "即时通信登录失败", Toast.LENGTH_LONG).show();
+					callback.on(false);
 				}
 			}
 		});

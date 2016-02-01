@@ -17,9 +17,9 @@ public class ImageMessage extends Message {
 	 */
 	public Bitmap thumbnail;
 	/**
-	 * 缩略图本地路径
+	 * 缩略图本地文件
 	 */
-	public String thumbnailPath;
+	public File thumbnailFile;
 	/**
 	 * 缩略图URL
 	 */
@@ -29,9 +29,9 @@ public class ImageMessage extends Message {
 	 */
 	public Bitmap original;
 	/**
-	 * 原始图本地路径
+	 * 原始图本地文件
 	 */
-	public String originalPath;
+	public File originalFile;
 	/**
 	 * 原始图URL
 	 */
@@ -56,11 +56,11 @@ public class ImageMessage extends Message {
 	@Override
 	public EMMessage toEMMessage() {
 		EMMessage emMessage = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
-		if(null != thumbnailPath) {
-			emMessage.addBody(new ImageMessageBody(new File(thumbnailPath)));
+		if(null != thumbnailFile) {
+			emMessage.addBody(new ImageMessageBody(thumbnailFile));
 		}
-		else if(null != originalPath) {
-			emMessage.addBody(new ImageMessageBody(new File(originalPath)));
+		else if(null != originalFile) {
+			emMessage.addBody(new ImageMessageBody(originalFile));
 		}
 		return emMessage;
 	}

@@ -9,8 +9,10 @@ import com.easemob.exceptions.EaseMobException;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.pretty.R;
+import com.slfuture.pretty.im.utility.message.ImageMessage;
 import com.slfuture.pretty.im.utility.message.Message;
 import com.slfuture.pretty.im.utility.message.SoundMessage;
+import com.slfuture.pretty.im.utility.message.TextMessage;
 import com.slfuture.pretty.im.utility.message.core.IMessage;
 import com.slfuture.pretty.im.view.form.ChatMessagesFragment.IChatMessageAdapter;
 
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -132,8 +135,25 @@ public class SingleChatActivity extends ActivityEx {
 		txtText.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				String text = v.getText().toString();
+				if(text.startsWith("\n")) {
+					text = text.substring(1);
+				}
+				if(0 == text.length()) {
+					return false;
+				}
 				if (event != null && (KeyEvent.KEYCODE_ENTER == event.getKeyCode())) {
-					
+					// 发送文字
+					TextMessage message = new TextMessage();
+					message.from = selfId;
+					message.orientation = IMessage.ORIENTATION_SEND;
+					message.time = DateTime.now();
+					message.text = v.getText().toString();
+					send(message);
+			        //
+			        v.setText("");
+			        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			        inputMethodManager.hideSoftInputFromWindow(txtText.getWindowToken(), 0);
 				}
 				return false;
 			}
@@ -198,7 +218,31 @@ public class SingleChatActivity extends ActivityEx {
 				if(null == frgChatMore) {
 					FragmentManager fm = getFragmentManager();  
 			        FragmentTransaction transaction = fm.beginTransaction();
-			        frgChatMore = new ChatMoreFragment();
+			        frgChatMore = new ChatMoreFragment() {
+			        	/**
+			        	 * 选择图片
+			        	 * 
+			        	 * @param file 图片文件
+			        	 */
+			        	public void onChooseImage(File file) {
+			        		ImageMessage message = new ImageMessage();
+							message.from = selfId;
+							message.orientation = IMessage.ORIENTATION_SEND;
+							message.time = DateTime.now();
+							message.originalFile = file;
+							send(message);
+			        	}
+
+			        	/**
+			        	 * 拨号回调
+			        	 * 
+			        	 * @param type 拨号类型
+			        	 * @see Module
+			        	 */
+			        	public void onDial(int type) {
+			        		
+			        	}
+			        };
 			        transaction.replace(R.id.singlechat_layout_panel, frgChatMore);
 			        transaction.commit();
 			        //
@@ -242,6 +286,11 @@ public class SingleChatActivity extends ActivityEx {
 			}
 		});
 	}
+
+	@Override
+    protected void onDestroy() {
+    	unregisterReceiver(receiver);
+    }
 
     /**
      * 准备数据

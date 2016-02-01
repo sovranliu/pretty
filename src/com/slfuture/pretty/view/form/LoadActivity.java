@@ -1,14 +1,20 @@
 package com.slfuture.pretty.view.form;
 
+import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.pretty.Program;
 import com.slfuture.pretty.R;
 import com.slfuture.pretty.general.view.form.ImageActivity;
+import com.slfuture.pretty.im.Module;
+import com.slfuture.pretty.im.core.IReactor;
 import com.slfuture.pretty.im.view.form.SingleChatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 
@@ -36,8 +42,38 @@ public class LoadActivity extends ActivityEx {
 		btn1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(LoadActivity.this, SingleChatActivity.class);
-				LoadActivity.this.startActivity(intent);
+				Module.context = Program.application;
+				Module.reactor = new IReactor() {
+					@Override
+					public Bitmap getPhoto(String userId) {
+						return GraphicsHelper.decodeResource(LoadActivity.this, R.drawable.demo_photo);
+					}
+					@Override
+					public String getName(String userId) {
+						return "柳君";
+					}
+					@Override
+					public String getAccount() {
+						return "appuser_2879";
+					}
+					@Override
+					public String getPassword() {
+						return "15021819287";
+					}
+				};
+				Module.initialize();
+				Module.login(new IEventable<Boolean>() {
+					@Override
+					public void on(Boolean data) {
+						if(!data) {
+							return;
+						}
+						Intent intent = new Intent(LoadActivity.this, SingleChatActivity.class);
+						intent.putExtra("selfId", "appuser_2879");
+						intent.putExtra("remoteId", "appuser_12784");
+						LoadActivity.this.startActivity(intent);
+					}
+				});
 			}
 		});
 		btn2.setOnClickListener(new View.OnClickListener() {

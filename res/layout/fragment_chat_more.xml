@@ -31,78 +31,78 @@
 		    android:textColor="@color/grey_text" />
 	</RelativeLayout>
 	<RelativeLayout
-        android:id="@+id/chatmore_layout_dial"
+        android:id="@+id/chatmore_layout_camera"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/grey_bg"
         android:padding="10dp">
 		<ImageButton
-		    android:id="@+id/chatmore_button_dial"
+		    android:id="@+id/chatmore_button_camera"
 		    android:layout_width="60dp"
 		    android:layout_height="60dp"
 		    android:layout_alignParentTop="true"
 		    android:layout_centerHorizontal="true"
 		    android:scaleType="fitXY"
-		    android:background="@drawable/selector_chat_dial" />
+		    android:background="@drawable/selector_chat_camera" />
 		<TextView
-		   android:id="@+id/chatmore_label_dial"
+		   android:id="@+id/chatmore_label_camera"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
-		    android:layout_below="@id/chatmore_button_dial"
+		    android:layout_below="@id/chatmore_button_camera"
 		    android:layout_marginTop="5dp"
-		    android:text="通话"
+		    android:text="拍照"
 		    android:textColor="@color/grey_text"  />
 	</RelativeLayout>
 	<RelativeLayout
-        android:id="@+id/chatmore_layout_location"
+        android:id="@+id/chatmore_layout_audio"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/grey_bg"
         android:padding="10dp">
 		<ImageButton
-		    android:id="@+id/chatmore_button_location"
+		    android:id="@+id/chatmore_button_audio"
 		    android:layout_width="60dp"
 		    android:layout_height="60dp"
 		    android:layout_alignParentTop="true"
 		    android:layout_centerHorizontal="true"
 		    android:scaleType="fitXY"
-		    android:background="@drawable/selector_chat_location" />
+		    android:background="@drawable/selector_chat_audio" />
 		<TextView
-		   android:id="@+id/chatmore_label_location"
+		   android:id="@+id/chatmore_label_audio"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
-		    android:layout_below="@id/chatmore_button_location"
+		    android:layout_below="@id/chatmore_button_audio"
 		    android:layout_marginTop="5dp"
-		    android:text="位置"
+		    android:text="语音"
 		    android:textColor="@color/grey_text"  />
 	</RelativeLayout>
 	<RelativeLayout
-        android:id="@+id/chatmore_layout_money"
+        android:id="@+id/chatmore_layout_video"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/grey_bg"
         android:padding="10dp">
 		<ImageButton
-		    android:id="@+id/chatmore_button_money"
+		    android:id="@+id/chatmore_button_video"
 		    android:layout_width="60dp"
 		    android:layout_height="60dp"
 		    android:layout_alignParentTop="true"
 		    android:layout_centerHorizontal="true"
 		    android:scaleType="fitXY"
-		    android:background="@drawable/selector_chat_money" />
+		    android:background="@drawable/selector_chat_video" />
 		<TextView
-		   android:id="@+id/chatmore_label_money"
+		   android:id="@+id/chatmore_label_video"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
-		    android:layout_below="@id/chatmore_button_money"
+		    android:layout_below="@id/chatmore_button_video"
 		    android:layout_marginTop="5dp"
-		    android:text="红包"
+		    android:text="视频"
 		    android:textColor="@color/grey_text"  />
 	</RelativeLayout>
 </LinearLayout>

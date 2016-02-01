@@ -1,8 +1,11 @@
 package com.slfuture.pretty.im.view.form;
 
+import java.io.File;
+
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.pluto.communication.Host;
 import com.slfuture.pluto.communication.response.ImageResponse;
+import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
 import com.slfuture.pretty.R;
@@ -16,6 +19,7 @@ import com.slfuture.pretty.im.utility.message.core.IMessage;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -100,24 +104,27 @@ public class ChatMessagesFragment extends FragmentEx {
 				image.setVisibility(View.VISIBLE);
 				ImageMessage imageMessage = (ImageMessage) message;
 				if(null != imageMessage.thumbnail) {
-					image.setImageBitmap(imageMessage.thumbnail);
+					readerImage(imageMessage.thumbnail);
 				}
 				else if(null != imageMessage.thumbnailUrl) {
 					Host.doImage("", new ImageResponse(imageMessage.thumbnailUrl) {
 						@Override
 						public void onFinished(Bitmap content) {
-							image.setImageBitmap(content);
+							readerImage(content);
 						}
 					}, imageMessage.thumbnailUrl);
 				}
 				else if(null != imageMessage.original) {
-					image.setImageBitmap(imageMessage.original);
+					readerImage(imageMessage.original);
+				}
+				else if(null != imageMessage.originalFile) {
+					readerImage(imageMessage.originalFile);
 				}
 				else if(null != imageMessage.originalUrl) {
 					Host.doImage("", new ImageResponse(imageMessage.originalUrl) {
 						@Override
 						public void onFinished(Bitmap content) {
-							photo.setImageBitmap(content);
+							readerImage(content);
 						}
 					}, imageMessage.originalUrl);
 				}
@@ -139,6 +146,34 @@ public class ChatMessagesFragment extends FragmentEx {
 				image.setVisibility(View.GONE);
 				break;
 			}
+		}
+		
+		/**
+		 * 渲染图片文件
+		 * 
+		 * @param file 图片文件
+		 */
+		public void readerImage(File file) {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			LayoutParams params = image.getLayoutParams();
+			params.height = params.width * options.outHeight / options.outWidth;
+			image.setLayoutParams(params);
+			//
+			image.setImageBitmap(GraphicsHelper.decodeFile(file, params.width, params.height));
+		}
+
+		/**
+		 * 渲染位图对象
+		 * 
+		 * @param bitmap 位图对象
+		 */
+		public void readerImage(Bitmap bitmap) {
+			LayoutParams params = image.getLayoutParams();
+			params.height = params.width * bitmap.getHeight() / bitmap.getWidth();
+			image.setLayoutParams(params);
+			//
+			image.setImageBitmap(bitmap);
 		}
 	}
 
@@ -355,9 +390,8 @@ public class ChatMessagesFragment extends FragmentEx {
 	/**
 	 * 界面创建
 	 */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+    	super.onActivityCreated(savedInstanceState);
 		//
 		RelativeLayout layout = new RelativeLayout(this.getActivity());
 		layout.setGravity(RelativeLayout.CENTER_IN_PARENT);

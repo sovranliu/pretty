@@ -24,6 +24,7 @@ import android.view.SurfaceHolder;
 
 import com.easemob.chat.EMVideoCallHelper;
 
+@SuppressWarnings("deprecation")
 public class CameraHelper implements PreviewCallback {
     private static final String TAG = "CameraHelper";
 
@@ -217,12 +218,12 @@ public class CameraHelper implements PreviewCallback {
         int nWidth = 0, nHeight = 0;  
         int wh = 0;
         int uvsize = 0;
-        int uvHeight = 0;  
+        // int uvHeight = 0;  
         if(srcWidth != nWidth || srcHeight != nHeight)  {  
             nWidth = srcWidth;  
             nHeight = srcHeight;  
             wh = srcWidth * srcHeight;  
-            uvHeight = srcHeight >> 1;//uvHeight = height / 2  
+            // uvHeight = srcHeight >> 1;//uvHeight = height / 2  
         }        
         uvsize = wh>>1;
         for(int i = 0;i<wh;i++){
