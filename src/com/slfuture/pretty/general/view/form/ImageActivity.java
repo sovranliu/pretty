@@ -88,7 +88,7 @@ public class ImageActivity extends ActivityEx {
 				image.setOnTouchListener(new MulitPointTouchListener ());
 				image.setScaleType(ScaleType.MATRIX);
 			}
-		}, 100);
+		}, 1000);
 	}
 
 	/**

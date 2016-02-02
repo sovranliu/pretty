@@ -1,5 +1,7 @@
 package com.slfuture.pretty.im.utility.message;
 
+import java.io.File;
+
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
@@ -91,8 +93,17 @@ public abstract class Message implements IMessage {
         	imageMessage.from = message.getFrom();
         	imageMessage.orientation = orientation;
         	imageMessage.time = DateTime.parse(message.getMsgTime());
+        	if(null != ((ImageMessageBody) message.getBody()).getLocalUrl()) {
+        		imageMessage.originalFile = new File(((ImageMessageBody) message.getBody()).getLocalUrl());
+        	}
         	imageMessage.thumbnailUrl = ((ImageMessageBody) message.getBody()).getThumbnailUrl();
+        	if("null".equals(imageMessage.thumbnailUrl)) {
+        		imageMessage.thumbnailUrl = null;
+        	}
         	imageMessage.originalUrl = ((ImageMessageBody) message.getBody()).getRemoteUrl();
+        	if("null".equals(imageMessage.originalUrl)) {
+        		imageMessage.originalUrl = null;
+        	}
         	return imageMessage;
         case VOICE:
         	SoundMessage voiceMessage = new SoundMessage();

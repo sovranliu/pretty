@@ -27,8 +27,8 @@
 	    android:visibility="gone" />
 	<ImageView
 	    android:id="@+id/messagesleft_image_message"
-	    android:layout_width="100dp"
-	    android:layout_height="100dp"
+	    android:layout_width="200dp"
+	    android:layout_height="200dp"
 	    android:layout_marginLeft="5dp"
 		android:paddingLeft="14dp"
 	    android:scaleType="fitXY"

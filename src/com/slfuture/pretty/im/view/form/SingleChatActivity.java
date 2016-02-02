@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -142,7 +143,7 @@ public class SingleChatActivity extends ActivityEx {
 				if(0 == text.length()) {
 					return false;
 				}
-				if (event != null && (KeyEvent.KEYCODE_ENTER == event.getKeyCode())) {
+				if (EditorInfo.IME_ACTION_SEND == actionId) {
 					// 发送文字
 					TextMessage message = new TextMessage();
 					message.from = selfId;
@@ -289,6 +290,8 @@ public class SingleChatActivity extends ActivityEx {
 
 	@Override
     protected void onDestroy() {
+		super.onDestroy();
+		//
     	unregisterReceiver(receiver);
     }
 

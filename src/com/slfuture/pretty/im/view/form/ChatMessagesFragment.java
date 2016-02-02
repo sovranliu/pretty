@@ -9,6 +9,7 @@ import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
 import com.slfuture.pretty.R;
+import com.slfuture.pretty.general.view.form.ImageActivity;
 import com.slfuture.pretty.im.Module;
 import com.slfuture.pretty.im.utility.message.AudioMessage;
 import com.slfuture.pretty.im.utility.message.VideoMessage;
@@ -18,6 +19,7 @@ import com.slfuture.pretty.im.utility.message.core.IMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -156,6 +158,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		public void readerImage(File file) {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 			LayoutParams params = image.getLayoutParams();
 			params.height = params.width * options.outHeight / options.outWidth;
 			image.setLayoutParams(params);
@@ -275,6 +278,14 @@ public class ChatMessagesFragment extends FragmentEx {
         public long getItemId(int arg0) {
             return 0;
         }
+        @Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+        @Override
+		public int getItemViewType(int position) {
+        	return messageList.get(position).orientation() - 1;
+		}
         @SuppressLint("InflateParams")
 		@Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -294,11 +305,6 @@ public class ChatMessagesFragment extends FragmentEx {
                     holder.text = (TextView)convertView.findViewById(R.id.messagesleft_label_message);
                     holder.image = (ImageView)convertView.findViewById(R.id.messagesleft_image_message);
                 }
-                Bitmap photo = Module.reactor.getPhoto(message.from());
-                if(null != photo) {
-                	holder.photo.setImageBitmap(photo);
-                }
-                holder.photo.setTag(message.orientation());
                 holder.photo.setOnClickListener(new View.OnClickListener() {
 	                @Override
 	                public void onClick(View v) {
@@ -314,10 +320,39 @@ public class ChatMessagesFragment extends FragmentEx {
 	                	}
 	                }
 	            });
+                holder.image.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if(null == v.getTag()) {
+							return;
+						}
+						ImageMessage message = (ImageMessage) messageList.get((Integer) v.getTag());
+						Intent intent = new Intent(ChatMessagesFragment.this.getActivity(), ImageActivity.class);
+						if(null != message.originalFile) {
+							intent.putExtra("path", message.originalFile.getAbsolutePath());
+						}
+						else if(null != message.thumbnailFile) {
+							intent.putExtra("path", message.thumbnailFile.getAbsolutePath());
+						}
+						if(null != message.originalUrl) {
+							intent.putExtra("url", message.originalUrl);
+						}
+						ChatMessagesFragment.this.startActivity(intent);
+					}
+				});
+				//
                 convertView.setTag(holder);
             }
             else {
                 holder = (ViewHolder)convertView.getTag();
+            }
+            holder.photo.setTag(message.orientation());
+            if(IMessage.TYPE_IMAGE == message.type()) {
+                holder.image.setTag(position);
+            }
+            Bitmap photo = Module.reactor.getPhoto(message.from());
+            if(null != photo) {
+            	holder.photo.setImageBitmap(photo);
             }
             holder.render(message);
             return convertView;
@@ -375,6 +410,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	public void addMessage(IMessage message) {
 		messageList.add(message);
 		messagesAdapter.notifyDataSetChanged();
+        listMessages.setSelection(listMessages.getCount() - 1);
 	}
 
 	/**
@@ -385,6 +421,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	public void addMessage(List<IMessage> messages) {
 		messageList.add(messages);
 		messagesAdapter.notifyDataSetChanged();
+        listMessages.setSelection(listMessages.getCount() - 1);
 	}
 
 	/**

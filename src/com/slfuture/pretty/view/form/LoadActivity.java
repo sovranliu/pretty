@@ -70,7 +70,7 @@ public class LoadActivity extends ActivityEx {
 						}
 						Intent intent = new Intent(LoadActivity.this, SingleChatActivity.class);
 						intent.putExtra("selfId", "appuser_2879");
-						intent.putExtra("remoteId", "appuser_12784");
+						intent.putExtra("remoteId", "appuser_1679");
 						LoadActivity.this.startActivity(intent);
 					}
 				});
