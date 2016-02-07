@@ -6,8 +6,10 @@ import com.easemob.chat.EMCallStateChangeListener.CallState;
 import com.easemob.exceptions.EMServiceNotReadyException;
 
 import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.carrie.base.time.Duration;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pluto.etc.GraphicsHelper;
+import com.slfuture.pluto.etc.ParameterRunnable;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 import com.slfuture.pretty.R;
@@ -107,7 +109,7 @@ public class AudioActivity extends ActivityEx {
 		}
 		labName.setText(Module.reactor.getName(from));
 	}
-	
+
 	/**
 	 * 处理数据
 	 */
@@ -121,19 +123,30 @@ public class AudioActivity extends ActivityEx {
 				switch ((CallState) data) {
 		        case CONNECTING:
 		        	isDialing = true;
-		        	labName.setText("语音通话连接中");
+		        	labDescription.setText("语音通话连接中");
 		            break;
 		        case CONNECTED:
 		        	isDialing = true;
-		        	labName.setText("语音通话响铃中");
+		        	labDescription.setText("语音通话响铃中");
 		            break;
 		        case ACCEPTED:
 		        	isDialing = true;
-		        	labName.setText("语音通话进行中");
+		        	labDescription.setText("语音通话中");
+		        	Controller.doDelay(new ParameterRunnable(0) {
+						@Override
+						public void run() {
+							if(!isDialing) {
+								return;
+							}
+							parameter = (Integer) parameter + 1;
+							labDescription.setText("语音通话中 " + Duration.createSeconds((Integer) parameter).toString());
+							Controller.doDelay(this, 1000);
+						}
+		        	}, 1000);
 		            break;
 		        case DISCONNNECTED:
 		        	isDialing = false;
-		        	labName.setText("语音通话已断开");
+		        	labDescription.setText("语音通话已断开");
 		        	AudioActivity.this.finish();
 		            break;
 		        default:
@@ -144,7 +157,7 @@ public class AudioActivity extends ActivityEx {
 		EMChatManager.getInstance().addVoiceCallStateChangeListener(new EMCallStateChangeListener() {
 		    @Override
 		    public void onCallStateChanged(CallState callState, CallError error) {
-		    	Controller.doMerge(556, callState);
+		    	Controller.doFork(556, callState);
 		    }
 		});
 		if(isCaller) {

@@ -9,6 +9,7 @@ import com.easemob.exceptions.EaseMobException;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.pretty.R;
+import com.slfuture.pretty.im.Module;
 import com.slfuture.pretty.im.utility.message.ImageMessage;
 import com.slfuture.pretty.im.utility.message.Message;
 import com.slfuture.pretty.im.utility.message.SoundMessage;
@@ -241,7 +242,19 @@ public class SingleChatActivity extends ActivityEx {
 			        	 * @see Module
 			        	 */
 			        	public void onDial(int type) {
-			        		
+			        		Intent intent = null;
+			        		if(Module.DIAL_TYPE_AUDIO == type) {
+			        			intent = new Intent(SingleChatActivity.this, AudioActivity.class);
+			        			intent.putExtra("from", remoteId);
+			        			intent.putExtra("isCaller", true);
+			        			SingleChatActivity.this.startActivity(intent);
+			        		}
+			        		else if(Module.DIAL_TYPE_VIDEO == type) {
+			        			intent = new Intent(SingleChatActivity.this, VideoActivity.class);
+			        			intent.putExtra("from", remoteId);
+			        			intent.putExtra("isCaller", true);
+			        			SingleChatActivity.this.startActivity(intent);
+			        		}
 			        	}
 			        };
 			        transaction.replace(R.id.singlechat_layout_panel, frgChatMore);

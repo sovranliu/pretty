@@ -20,7 +20,7 @@
 	    android:layout_below="@id/audio_image_photo"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="30dp"
-	    android:text="私人医生"
+	    android:text=""
 	    android:textColor="@color/white"
 	    android:textSize="18sp" />
 	<TextView
@@ -30,7 +30,7 @@
 	    android:layout_below="@id/audio_label_name"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="10dp"
-	    android:text="通话时长 00:05:10"
+	    android:text=""
 	    android:textColor="@color/grey"
 	    android:textSize="15sp" />
 	<LinearLayout

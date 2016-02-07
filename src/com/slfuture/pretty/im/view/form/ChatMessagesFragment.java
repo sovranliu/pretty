@@ -448,6 +448,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		messagesAdapter = new MessagesAdapter(this.getActivity());
 		listMessages.setAdapter(messagesAdapter);
 		messagesAdapter.notifyDataSetChanged();
+        listMessages.setSelection(listMessages.getCount() - 1);
 	}
 
 	/**

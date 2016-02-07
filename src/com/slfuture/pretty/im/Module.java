@@ -60,13 +60,20 @@ public class Module {
 		//
 		dialReceiver = new BroadcastReceiver() {
            	@Override
-           	public void onReceive(Context context, Intent intent) {
+           	public void onReceive(Context cxt, Intent intent) {
            		String from = intent.getStringExtra("from");
            		String type = intent.getStringExtra("type");
+           		int dialType = Module.DIAL_TYPE_UNKNOWN;
+           		if("audio".equals(type)) {
+           			dialType = Module.DIAL_TYPE_AUDIO;
+           		}
+           		else if("video".equals(type)) {
+           			dialType = Module.DIAL_TYPE_VIDEO;
+           		}
            		Intent ringIntent = new Intent(context, RingActivity.class);
-           		ringIntent.putExtra("id", from);
-           		ringIntent.putExtra("userName", "医生热线");
-           		ringIntent.putExtra("type", type);
+           		ringIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+           		ringIntent.putExtra("type", dialType);
+           		ringIntent.putExtra("from", from);
            		context.startActivity(ringIntent);
            	}
         };

@@ -20,7 +20,7 @@
 	    android:layout_below="@id/ring_image_photo"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="30dp"
-	    android:text="私人医生"
+	    android:text=""
 	    android:textColor="@color/white"
 	    android:textSize="18sp" />
 	<TextView
@@ -30,7 +30,7 @@
 	    android:layout_below="@id/ring_label_name"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="10dp"
-	    android:text="正在向您发起视频通话邀请"
+	    android:text=""
 	    android:textColor="@color/grey"
 	    android:textSize="15sp" />
 	<LinearLayout

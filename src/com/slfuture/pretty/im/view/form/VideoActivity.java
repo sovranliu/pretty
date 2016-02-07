@@ -8,11 +8,13 @@ import com.easemob.chat.EMVideoCallHelper.EMVideoOrientation;
 import com.easemob.exceptions.EMServiceNotReadyException;
 
 import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.carrie.base.time.Duration;
 import com.slfuture.pretty.R;
 import com.slfuture.pretty.im.Module;
 import com.slfuture.pretty.im.utility.CameraHelper;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pluto.etc.GraphicsHelper;
+import com.slfuture.pluto.etc.ParameterRunnable;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 
@@ -25,7 +27,6 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -79,6 +80,11 @@ public class VideoActivity extends ActivityEx {
 	public ImageView imgHandup;
 	@ResourceView(id = R.id.video_image_speaker)
 	public ImageView imgSpeaker;
+	@ResourceView(id = R.id.video_surface_local)
+	public SurfaceView surfaceLocal;
+	@ResourceView(id = R.id.video_surface_opposite)
+	public SurfaceView surfaceOpposite;
+
 
     /**
      * 摄像头帮助对象
@@ -92,6 +98,10 @@ public class VideoActivity extends ActivityEx {
 	 * 拨号状态，true：主动拨号，false：被动接听
 	 */
 	private boolean isCaller = false;
+	/**
+	 * 呼叫状态，true：正在通话中，false：未通话
+	 */
+	private boolean isDialing = false;
 	/**
 	 * 静音状态
 	 */
@@ -107,10 +117,7 @@ public class VideoActivity extends ActivityEx {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.i("TOWER", "VideoActivity.onCreate() execute");
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_video);
 		// 界面处理
 		prepare();
 	}
@@ -119,6 +126,13 @@ public class VideoActivity extends ActivityEx {
     protected void onDestroy() {
         super.onDestroy();
         //
+		if(isDialing) {
+			try {
+				isDialing = false;
+				EMChatManager.getInstance().endCall();
+			}
+			catch (Exception e) { }
+		}
         EMVideoCallHelper.getInstance().setSurfaceView(null);
     	if(null != cameraHelper) {
 			cameraHelper.stopCapture();
@@ -153,16 +167,33 @@ public class VideoActivity extends ActivityEx {
 			public void on(CallState data) {
 				switch ((CallState) data) {
 		        case CONNECTING:
-		        	labDescription.setText("连接中");
+		        	isDialing = true;
+		        	labDescription.setText("视频通话连接中");
 		            break;
 		        case CONNECTED:
-		        	labDescription.setText("响铃中");
+		        	isDialing = true;
+		        	labDescription.setText("视频通话响铃中");
 		            break;
 		        case ACCEPTED:
-		        	labDescription.setText("通话中");
+		        	isDialing = true;
+		        	labDescription.setText("视频通话中");
+		        	surfaceOpposite.setVisibility(View.VISIBLE);
+		            surfaceLocal.setZOrderOnTop(true);
+		        	Controller.doDelay(new ParameterRunnable(0) {
+						@Override
+						public void run() {
+							if(!isDialing) {
+								return;
+							}
+							parameter = (Integer) parameter + 1;
+							labDescription.setText("视频通话中 " + Duration.createSeconds((Integer) parameter).toString());
+							Controller.doDelay(this, 1000);
+						}
+		        	}, 1000);
 		            break;
 		        case DISCONNNECTED:
-		        	labDescription.setText("已断开");
+		        	isDialing = false;
+		        	labDescription.setText("视频通话已断开");
 		        	VideoActivity.this.finish();
 		            break;
 		        default:
@@ -173,7 +204,7 @@ public class VideoActivity extends ActivityEx {
 		EMChatManager.getInstance().addVoiceCallStateChangeListener(new EMCallStateChangeListener() {
 		    @Override
 		    public void onCallStateChanged(CallState callState, CallError error) {
-		    	Controller.doMerge(557, callState);
+		    	Controller.doFork(557, callState);
 		    }
 		});
 	}
@@ -206,19 +237,17 @@ public class VideoActivity extends ActivityEx {
         		| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
         		| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         // 显示本地图像的surfaceview
-		SurfaceView localSurface = (SurfaceView) findViewById(R.id.video_surface_local);
-        localSurface.setZOrderMediaOverlay(true);
-        localSurface.setZOrderOnTop(true);
-        localSurface.getHolder().addCallback(new LocalCallback());
+        surfaceLocal.setZOrderMediaOverlay(true);
+        surfaceLocal.setZOrderOnTop(true);
+        surfaceLocal.getHolder().addCallback(new LocalCallback());
         // SurfaceHolder localSurfaceHolder = localSurface.getHolder();
         // 显示对方图像的surfaceview
-        SurfaceView oppositeSurface = (SurfaceView) findViewById(R.id.video_surface_opposite);
-        SurfaceHolder oppositeSurfaceHolder = oppositeSurface.getHolder();
+        SurfaceHolder oppositeSurfaceHolder = surfaceOpposite.getHolder();
         // 设置显示对方图像的surfaceview
-        EMVideoCallHelper.getInstance().setSurfaceView(oppositeSurface);
+        EMVideoCallHelper.getInstance().setSurfaceView(surfaceOpposite);
         oppositeSurfaceHolder.addCallback(new OppositeCallback());
         EMVideoCallHelper.getInstance().setVideoOrientation(EMVideoOrientation.EMPortrait);
-        cameraHelper = new CameraHelper(EMVideoCallHelper.getInstance(), localSurface.getHolder());
+        cameraHelper = new CameraHelper(EMVideoCallHelper.getInstance(), surfaceLocal.getHolder());
         cameraHelper.setStartFlag(true);
 	}
 
@@ -231,6 +260,7 @@ public class VideoActivity extends ActivityEx {
 			public void onClick(View v) {
 				imgHandup.setVisibility(View.INVISIBLE);
 				try {
+					isDialing = false;
 					EMChatManager.getInstance().endCall();
 				}
 				catch (Exception e) { }
@@ -250,14 +280,12 @@ public class VideoActivity extends ActivityEx {
 				if (muteStatus) {
 					// 关闭静音
 					imgMute.setImageResource(R.drawable.icon_mute_normal);
-					imgMute.getBackground().setAlpha(0);
 					audioManager.setMicrophoneMute(false);
 					muteStatus = false;
 				}
 				else {
 					// 打开静音
 					imgMute.setImageResource(R.drawable.icon_mute_on);
-					imgMute.getBackground().setAlpha(0);
 					audioManager.setMicrophoneMute(true);
 					muteStatus = true;
 				}
