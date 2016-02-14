@@ -188,23 +188,18 @@ public class ChatMessagesFragment extends FragmentEx {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = true;
 			BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-			final float scale = ChatMessagesFragment.this.getResources().getDisplayMetrics().density;
-			LayoutParams params = image.getLayoutParams();
 			int width = ChatMessagesFragment.this.getResources().getDisplayMetrics().widthPixels / 3;
 			Bitmap result = null;
 			if(options.outWidth < width) {
-				params.width = (int) (14  * scale + 0.5f) + options.outWidth + (int)(10 * scale + 0.5f);
-				params.height = options.outHeight + (int)(10 * scale + 0.5f);
 				result = GraphicsHelper.decodeFile(file, options.outWidth, options.outHeight);
 			}
 			else {
-				params.width = (int) (14  * scale + 0.5f) + width + (int)(10 * scale + 0.5f);
-				params.height = width * options.outHeight / options.outWidth + (int)(10 * scale + 0.5f);
 				result = GraphicsHelper.decodeFile(file, width, width * options.outHeight / options.outWidth);
 			}
-			image.setLayoutParams(params);
-			image.setImageBitmap(result);
-			return result;
+			if(null == result) {
+				return null;
+			}
+			return readerImage(result);
 		}
 
 		/**

@@ -2,7 +2,9 @@ package com.slfuture.pretty.im.view.form;
 
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMVideoCallHelper;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMCallStateChangeListener.CallState;
 import com.easemob.chat.EMVideoCallHelper.EMVideoOrientation;
 import com.easemob.exceptions.EMServiceNotReadyException;
@@ -138,6 +140,21 @@ public class VideoActivity extends ActivityEx {
 			cameraHelper.stopCapture();
     	}
 		cameraHelper = null;
+		//
+		if(isCaller) {
+			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
+            message.setReceipt(from);
+            TextMessageBody body = new TextMessageBody("[视频通话]");
+            message.addBody(body);
+            EMChatManager.getInstance().saveMessage(message, false);
+		}
+		else {
+			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            message.setFrom(from);
+            TextMessageBody body = new TextMessageBody("[视频通话]");
+            message.addBody(body);
+            EMChatManager.getInstance().saveMessage(message, false);
+		}
     }
 
 	/**
