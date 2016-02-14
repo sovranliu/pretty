@@ -21,7 +21,7 @@ public interface IMessage {
 	/**
 	 * 短语音类型
 	 */
-	public final static int TYPE_SOUND = 3;
+	public final static int TYPE_VOICE = 3;
 	/**
 	 * 语音通话类型
 	 */

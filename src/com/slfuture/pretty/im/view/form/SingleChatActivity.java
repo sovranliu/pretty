@@ -12,7 +12,7 @@ import com.slfuture.pretty.R;
 import com.slfuture.pretty.im.Module;
 import com.slfuture.pretty.im.utility.message.ImageMessage;
 import com.slfuture.pretty.im.utility.message.Message;
-import com.slfuture.pretty.im.utility.message.SoundMessage;
+import com.slfuture.pretty.im.utility.message.VoiceMessage;
 import com.slfuture.pretty.im.utility.message.TextMessage;
 import com.slfuture.pretty.im.utility.message.core.IMessage;
 import com.slfuture.pretty.im.view.form.ChatMessagesFragment.IChatMessageAdapter;
@@ -85,9 +85,10 @@ public class SingleChatActivity extends ActivityEx {
 	public ImageButton btnMore;
 	@ResourceView(id=R.id.singlechat_text_text)
 	public EditText txtText;
-	@ResourceView(id=R.id.singlechat_button_sound)
-	public Button btnSound;
+	@ResourceView(id=R.id.singlechat_button_voice)
+	public Button btnVoice;
 	public ChatMoreFragment frgChatMore = null;
+	public ChatEmoticonFragment frgChatEmoticon = null;
 	public ChatMessagesFragment frgChatMessages = null;
 	
 	public SoundRecorder recorder = null;
@@ -123,13 +124,13 @@ public class SingleChatActivity extends ActivityEx {
 		btnMode.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(View.GONE == btnSound.getVisibility()) {
+				if(View.GONE == btnVoice.getVisibility()) {
 					txtText.setVisibility(View.GONE);
-					btnSound.setVisibility(View.VISIBLE);
+					btnVoice.setVisibility(View.VISIBLE);
 				}
 				else {
 					txtText.setVisibility(View.VISIBLE);
-					btnSound.setVisibility(View.GONE);
+					btnVoice.setVisibility(View.GONE);
 				}
 			}
 		});
@@ -178,7 +179,7 @@ public class SingleChatActivity extends ActivityEx {
 			}
         });
         //
-		btnSound.setOnTouchListener(new View.OnTouchListener() {
+		btnVoice.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				int action = event.getAction() & MotionEvent.ACTION_MASK;
@@ -195,11 +196,12 @@ public class SingleChatActivity extends ActivityEx {
 						return false;
 					}
 					// 发送短语音
-					SoundMessage message = new SoundMessage();
+					VoiceMessage message = new VoiceMessage();
 					message.from = selfId;
 					message.orientation = IMessage.ORIENTATION_SEND;
 					message.time = DateTime.now();
 					message.file = file;
+					message.length = (int) recorder.duration();
 					send(message);
 				}
 				else if(MotionEvent.ACTION_OUTSIDE == action) {
@@ -211,7 +213,30 @@ public class SingleChatActivity extends ActivityEx {
 		btnEmoticon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i("tag", "msg");
+				if(null == frgChatEmoticon) {
+					FragmentManager fm = getFragmentManager();  
+			        FragmentTransaction transaction = fm.beginTransaction();
+			        frgChatEmoticon = new ChatEmoticonFragment() {
+						@Override
+						public void onChoose(int index) {
+							TextMessage message = new TextMessage();
+							message.from = selfId;
+							message.orientation = IMessage.ORIENTATION_SEND;
+							message.time = DateTime.now();
+							message.text = "/" + index;
+							send(message);
+						}
+			        };
+			        transaction.replace(R.id.singlechat_layout_panel, frgChatEmoticon);
+			        transaction.commit();
+				}
+				else {
+					FragmentManager fm = getFragmentManager();  
+			        FragmentTransaction transaction = fm.beginTransaction();
+			        transaction.detach(frgChatEmoticon);
+			        transaction.commit();
+			        frgChatEmoticon = null;
+				}
 			}
 		});
 		btnMore.setOnClickListener(new View.OnClickListener() {

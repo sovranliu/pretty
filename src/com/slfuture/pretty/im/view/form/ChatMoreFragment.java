@@ -2,6 +2,7 @@ package com.slfuture.pretty.im.view.form;
 
 import java.io.File;
 
+import com.slfuture.carrie.base.etc.Serial;
 import com.slfuture.pluto.storage.Storage;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
@@ -11,8 +12,11 @@ import com.slfuture.pretty.im.Module;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 /**
  * 对话更多窗口层
@@ -28,6 +32,7 @@ public abstract class ChatMoreFragment extends FragmentEx {
 	@ResourceView(id = R.id.chatmore_button_video)
 	public ImageButton btnVideo;
 
+	private String cameraPath = null;
 
 	/**
 	 * 是否附着到根视图
@@ -54,6 +59,22 @@ public abstract class ChatMoreFragment extends FragmentEx {
 				startActivityForResult(intent, 1);
 			}
 		});
+    	btnCamera.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String state = Environment.getExternalStorageState();  
+				if (state.equals(Environment.MEDIA_MOUNTED)) {
+					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+					cameraPath = Storage.cameraDirectory() + Serial.makeSerialString() + ".jpg";
+					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(cameraPath)));
+					startActivityForResult(intent, 2);
+				}
+				else {
+					Toast.makeText(ChatMoreFragment.this.getActivity(), "未发现SD卡", Toast.LENGTH_LONG).show();  
+				}
+			}
+		});
     	btnAudio.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -70,12 +91,31 @@ public abstract class ChatMoreFragment extends FragmentEx {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
 		if(1 == requestCode) {
 			Uri uri = (intent == null || resultCode != -1 ? null : intent.getData());
 			if(null == uri) {
 				return;
 			}
 			onChooseImage(new File(Storage.getPathFromURI(this.getActivity(), uri)));
+		}
+		else if(2 == requestCode) {
+			File file = new File(cameraPath);
+			if(file.exists()) {
+				onChooseImage(file);
+			}
+//			File file = new File(Storage.cameraDirectory() + Serial.makeSerialString() + ".jpg");
+//			Bundle bundle = intent.getExtras();
+//            if (bundle != null) {
+//            	Bitmap photo = (Bitmap) bundle.get("data");
+//            	try {
+//					GraphicsHelper.saveFile(photo, file, 0, 0);
+//				}
+//            	catch (IOException e) {
+//					return;
+//				}
+//            	onChooseImage(file);
+//            }
 		}
 	}
 

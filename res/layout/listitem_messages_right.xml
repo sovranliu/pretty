@@ -15,24 +15,62 @@
 	    android:layout_alignParentTop="true"
 	    android:scaleType="fitXY"
 	    android:src="@drawable/chat_photo_default" />
-	<TextView
-	    android:id="@+id/messagesright_label_message"
+	<RelativeLayout
+	    android:id="@+id/messagesright_layout_text"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_toLeftOf="@id/messagesright_image_photo"
-	    android:text="你好世界" 
-	    android:background="@drawable/messagesright_bg"
-	    android:gravity="left|center_vertical"
-	    android:textSize="16sp"
-	    android:visibility="gone" />
-	<ImageView
-	    android:id="@+id/messagesright_image_message"
-	    android:layout_width="200dp"
-	    android:layout_height="200dp"
-	    android:scaleType="fitXY"
+	    android:visibility="gone">
+		<TextView
+		    android:id="@+id/messagesright_label_message"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="你好世界" 
+		    android:background="@drawable/messagesright_bg"
+		    android:gravity="left|center_vertical"
+		    android:textSize="16sp" />
+	</RelativeLayout>
+	<RelativeLayout
+	    android:id="@+id/messagesright_layout_image"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
 	    android:layout_toLeftOf="@id/messagesright_image_photo"
-		android:paddingRight="14dp"
-	    android:layout_marginRight="5dp"
-	    android:background="@drawable/messagesright_bg"
-	    android:src="@drawable/icon_program" />
+	    android:visibility="gone">
+		<ImageView
+		    android:id="@+id/messagesright_image_message"
+		    android:layout_width="214dp"
+		    android:layout_height="200dp"
+			android:paddingRight="14dp"
+		    android:layout_marginRight="5dp"
+		    android:scaleType="fitXY"
+		    android:background="@drawable/messagesright_bg"
+		    android:src="@drawable/icon_program" />
+	</RelativeLayout>
+	<RelativeLayout
+	    android:id="@+id/messagesright_layout_voice"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_toLeftOf="@id/messagesright_image_photo"
+	    android:visibility="gone">
+		<TextView
+		    android:id="@+id/messagesright_label_voice"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+			android:gravity="left|center_vertical"
+		    android:text="0'" 
+		    android:textSize="16sp"
+		    android:textColor="@color/grey_text" />
+		<ImageView
+		    android:id="@+id/messagesright_image_voice"
+		    android:layout_width="74dp"
+		    android:layout_height="40dp"
+		    android:layout_toRightOf="@id/messagesright_label_voice"
+		    android:layout_marginRight="5dp"
+			android:paddingRight="14dp"
+			android:paddingLeft="20dp"
+		    android:scaleType="fitXY"
+		    android:background="@drawable/messagesright_bg"
+		    android:src="@drawable/voice_right_stop" />
+	</RelativeLayout>
 </RelativeLayout>

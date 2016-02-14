@@ -5,6 +5,7 @@ import java.io.File;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
 import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.VoiceMessageBody;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.pretty.im.utility.message.core.IMessage;
 
@@ -106,11 +107,19 @@ public abstract class Message implements IMessage {
         	}
         	return imageMessage;
         case VOICE:
-        	SoundMessage voiceMessage = new SoundMessage();
+        	VoiceMessage voiceMessage = new VoiceMessage();
         	voiceMessage.id = message.getMsgId();
         	voiceMessage.from = message.getFrom();
         	voiceMessage.orientation = orientation;
         	voiceMessage.time = DateTime.parse(message.getMsgTime());
+        	VoiceMessageBody body = (VoiceMessageBody) message.getBody();
+        	voiceMessage.length = body.getLength();
+        	if(null != body.getLocalUrl() && !"null".equals(body.getLocalUrl())) {
+        		voiceMessage.file = new File(body.getLocalUrl());
+        	}
+        	if(null != body.getRemoteUrl() && !"null".equals(body.getRemoteUrl())) {
+        		voiceMessage.url = body.getRemoteUrl();
+        	}
         	return voiceMessage;
         case VIDEO:
         	VideoMessage videoMessage = new VideoMessage();
