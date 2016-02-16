@@ -3,7 +3,6 @@
     	<component>
     	    	<im>
     	    	    <sound folder="pretty/sound/" />
-    	    	    <camera folder="pretty/camera/" />
     	    	</im>
 		</component>
 </program>

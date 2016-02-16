@@ -7,12 +7,19 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Map.Entry;
+
 import com.easemob.EMCallBack;
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroupManager;
-
+import com.easemob.chat.EMMessage;
 import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.carrie.base.type.Table;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pretty.im.core.IReactor;
 import com.slfuture.pretty.im.view.form.RingActivity;
@@ -44,9 +51,17 @@ public class Module {
 	 */
 	public static IReactor reactor = null;
 	/**
-	 * 呼叫接收器
+	 * 通话接收器
 	 */
 	private static BroadcastReceiver dialReceiver = null;
+	/**
+	 * 命令接收器
+	 */
+	private static BroadcastReceiver commandReceiver = null;
+	/**
+	 * 连接监听器
+	 */
+	private static EMConnectionListener connectionListener = null;
 
 
     /**
@@ -78,6 +93,39 @@ public class Module {
            	}
         };
         context.registerReceiver(dialReceiver, new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction()));
+        commandReceiver = new BroadcastReceiver() {
+    		@Override
+    		public void onReceive(Context context, Intent intent) {
+				if(null == reactor) {
+					return;
+				}
+    			EMMessage message = intent.getParcelableExtra("message");
+    			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+    			Table<String, Object> data = new Table<String, Object>();
+    			for(Entry<String, String> entry : cmdMsgBody.params.entrySet()) {
+    				data.put(entry.getKey(), entry.getValue());
+    			}
+				reactor.onCommand(message.getFrom(), cmdMsgBody.action, data);
+    		}
+    	};
+    	context.registerReceiver(commandReceiver, new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction()));
+        connectionListener = new EMConnectionListener() {
+    	    @Override
+    		public void onConnected() {
+    	    	Log.d("pretty", "EMConnectionListener.onConnected()");
+    		}
+    		@Override
+    		public void onDisconnected(final int error) {
+    	    	Log.d("pretty", "EMConnectionListener.onDisconnected(" + error + ")");
+    			if (EMError.CONNECTION_CONFLICT == error) {
+    				if(null == reactor) {
+    					return;
+    				}
+    				reactor.onConflict();
+				}
+    		}
+    	};
+        EMChatManager.getInstance().addConnectionListener(connectionListener);
         return true;
 	}
 
@@ -85,9 +133,17 @@ public class Module {
      * 终止
      */
 	public static void terminate() {
+		if(null != commandReceiver) {
+			context.unregisterReceiver(commandReceiver);
+			commandReceiver = null;
+		}
 		if(null != dialReceiver) {
 			context.unregisterReceiver(dialReceiver);
 			dialReceiver = null;
+		}
+		if(null != connectionListener) {
+			EMChatManager.getInstance().removeConnectionListener(connectionListener);
+			connectionListener = null;
 		}
 		context = null;
     }
@@ -112,7 +168,7 @@ public class Module {
 				}
 			}
 		});
-		EMChatManager.getInstance().login(reactor.getAccount(), reactor.getPassword(), new EMCallBack() {
+		EMChatManager.getInstance().login(reactor.getUserId(), reactor.getPassword(), new EMCallBack() {
 			@Override
 			public void onSuccess() {
 				Log.d("pretty", "EMChatManager.login() success");
@@ -126,5 +182,19 @@ public class Module {
 				Controller.doMerge(559, false);
 			}
 		});
+	}
+
+	/**
+	 * 获取未读消息个数
+	 * 
+	 * @param userId 用户ID
+	 * @return 未读消息个数
+	 */
+	public static int getUnreadMessageCount(String userId) {
+		EMConversation conversation = EMChatManager.getInstance().getConversation(userId);
+		if(null == conversation) {
+			return 0;
+		}
+        return conversation.getUnreadMsgCount();
 	}
 }

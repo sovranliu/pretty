@@ -36,7 +36,7 @@ import android.widget.TextView;
 /**
  * 视频通话界面
  */
-@ResourceView(id = R.layout.activity_video)
+@ResourceView(clazz=R.layout.class, field="activity_video")
 public class VideoActivity extends ActivityEx {
     /**
      * 本地SurfaceHolder回调
@@ -70,21 +70,21 @@ public class VideoActivity extends ActivityEx {
     }
 
 
-	@ResourceView(id = R.id.video_image_photo)
+	@ResourceView(clazz=R.id.class, field="video_image_photo")
 	public ImageView imgPhoto;
-	@ResourceView(id = R.id.video_label_name)
+	@ResourceView(clazz=R.id.class, field="video_label_name")
 	public TextView labName;
-	@ResourceView(id = R.id.video_label_description)
+	@ResourceView(clazz=R.id.class, field="video_label_description")
 	public TextView labDescription;
-	@ResourceView(id = R.id.video_image_mute)
+	@ResourceView(clazz=R.id.class, field="video_image_mute")
 	public ImageView imgMute;
-	@ResourceView(id = R.id.video_image_handup)
+	@ResourceView(clazz=R.id.class, field="video_image_handup")
 	public ImageView imgHandup;
-	@ResourceView(id = R.id.video_image_speaker)
+	@ResourceView(clazz=R.id.class, field="video_image_speaker")
 	public ImageView imgSpeaker;
-	@ResourceView(id = R.id.video_surface_local)
+	@ResourceView(clazz=R.id.class, field="video_surface_local")
 	public SurfaceView surfaceLocal;
-	@ResourceView(id = R.id.video_surface_opposite)
+	@ResourceView(clazz=R.id.class, field="video_surface_opposite")
 	public SurfaceView surfaceOpposite;
 
 

@@ -21,15 +21,15 @@ import android.widget.Toast;
 /**
  * 对话更多窗口层
  */
-@ResourceView(id = R.layout.fragment_chat_more)
+@ResourceView(clazz=R.layout.class, field="fragment_chat_more")
 public abstract class ChatMoreFragment extends FragmentEx {
-	@ResourceView(id = R.id.chatmore_button_picture)
+	@ResourceView(clazz=R.id.class, field="chatmore_button_picture")
 	public ImageButton btnPicture;
-	@ResourceView(id = R.id.chatmore_button_camera)
+	@ResourceView(clazz=R.id.class, field="chatmore_button_camera")
 	public ImageButton btnCamera;
-	@ResourceView(id = R.id.chatmore_button_audio)
+	@ResourceView(clazz=R.id.class, field="chatmore_button_audio")
 	public ImageButton btnAudio;
-	@ResourceView(id = R.id.chatmore_button_video)
+	@ResourceView(clazz=R.id.class, field="chatmore_button_video")
 	public ImageButton btnVideo;
 
 	private String cameraPath = null;

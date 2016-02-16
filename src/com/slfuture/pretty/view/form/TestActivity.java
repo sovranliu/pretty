@@ -13,11 +13,11 @@ import com.slfuture.pluto.view.component.ActivityEx;
 /**
  * 引导页
  */
-@ResourceView(id=R.layout.activity_test)
+@ResourceView(clazz=R.layout.class, field="activity_test")
 public class TestActivity extends ActivityEx {
-	@ResourceView(id=R.id.test_image_1)
+	@ResourceView(clazz=R.id.class, field="test_image_1")
 	public ImageView img1;
-	@ResourceView(id=R.id.test_image_control1)
+	@ResourceView(clazz=R.id.class, field="test_image_control1")
 	public ImageView ctl1;
 	
 	/**

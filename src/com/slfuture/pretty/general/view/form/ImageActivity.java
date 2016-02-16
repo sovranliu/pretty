@@ -30,9 +30,9 @@ import com.slfuture.pretty.R;
 /**
  * 图片查看界面
  */
-@ResourceView(id=R.layout.activity_image)
+@ResourceView(clazz=R.layout.class, field="activity_image")
 public class ImageActivity extends ActivityEx {
-	@ResourceView(id=R.id.image_image_image)
+	@ResourceView(clazz=R.id.class, field="image_image_image")
 	public ImageView image;
 	/**
 	 * 对话框

@@ -23,15 +23,15 @@ import android.widget.SimpleAdapter;
 /**
  * 对话更多窗口层
  */
-@ResourceView(id = R.layout.fragment_chat_emoticon)
+@ResourceView(clazz=R.layout.class, field="fragment_chat_emoticon")
 public abstract class ChatEmoticonFragment extends FragmentEx {
 	/**
 	 * 自定义表情位图
 	 */
-	public final static int[] EMOTICON_IMAGE = {R.drawable.emoticon_1, R.drawable.emoticon_2, R.drawable.emoticon_3, R.drawable.emoticon_4, R.drawable.emoticon_5};
+	public final static int[] EMOTICON_IMAGE = {R.drawable.emoticon_1, R.drawable.emoticon_2, R.drawable.emoticon_3, R.drawable.emoticon_4, R.drawable.emoticon_5, R.drawable.emoticon_6, R.drawable.emoticon_7, R.drawable.emoticon_8, R.drawable.emoticon_9, R.drawable.emoticon_10, R.drawable.emoticon_11, R.drawable.emoticon_12, R.drawable.emoticon_13, R.drawable.emoticon_14, R.drawable.emoticon_15};
 
 
-	@ResourceView(id = R.id.chatemoticon_grid_icon)
+	@ResourceView(clazz=R.id.class, field="chatemoticon_grid_icon")
 	public GridView gridIcon;
 	/**
 	 * 图标数据

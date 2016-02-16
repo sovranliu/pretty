@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@ResourceView(id = R.layout.activity_testlistview)
+@ResourceView(clazz=R.layout.class, field="activity_testlistview")
 public class TestListViewActivity extends ActivityEx {
 	public class ViewHolder {
 		public TextView label;
@@ -131,7 +131,7 @@ public class TestListViewActivity extends ActivityEx {
 	/**
 	 * 列表控件
 	 */
-	@ResourceView(id = R.id.test_listview_test)
+	@ResourceView(clazz=R.id.class, field="test_listview_test")
 	public ListView listTest;
 	/**
 	 * 数据列表

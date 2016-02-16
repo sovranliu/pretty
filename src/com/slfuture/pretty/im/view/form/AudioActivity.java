@@ -30,19 +30,19 @@ import android.widget.TextView;
 /**
  * 语音通话界面
  */
-@ResourceView(id = R.layout.activity_audio)
+@ResourceView(clazz=R.layout.class, field="activity_audio")
 public class AudioActivity extends ActivityEx {
-	@ResourceView(id = R.id.audio_image_photo)
+	@ResourceView(clazz=R.id.class, field="audio_image_photo")
 	public ImageView imgPhoto;
-	@ResourceView(id = R.id.audio_label_name)
+	@ResourceView(clazz=R.id.class, field="audio_label_name")
 	public TextView labName;
-	@ResourceView(id = R.id.audio_label_description)
+	@ResourceView(clazz=R.id.class, field="audio_label_description")
 	public TextView labDescription;
-	@ResourceView(id = R.id.audio_image_mute)
+	@ResourceView(clazz=R.id.class, field="audio_image_mute")
 	public ImageView imgMute;
-	@ResourceView(id = R.id.audio_image_handup)
+	@ResourceView(clazz=R.id.class, field="audio_image_handup")
 	public ImageView imgHandup;
-	@ResourceView(id = R.id.audio_image_speaker)
+	@ResourceView(clazz=R.id.class, field="audio_image_speaker")
 	public ImageView imgSpeaker;
 
 	/**

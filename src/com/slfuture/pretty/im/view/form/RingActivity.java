@@ -27,17 +27,17 @@ import android.widget.TextView;
 /**
  * 响铃界面
  */
-@ResourceView(id = R.layout.activity_ring)
+@ResourceView(clazz=R.layout.class, field="activity_ring")
 public class RingActivity extends ActivityEx {
-	@ResourceView(id = R.id.ring_image_photo)
+	@ResourceView(clazz=R.id.class, field="ring_image_photo")
 	public ImageView imgPhoto;
-	@ResourceView(id = R.id.ring_label_name)
+	@ResourceView(clazz=R.id.class, field="ring_label_name")
 	public TextView labName;
-	@ResourceView(id = R.id.ring_label_description)
+	@ResourceView(clazz=R.id.class, field="ring_label_description")
 	public TextView labDescription;
-	@ResourceView(id = R.id.ring_image_handup)
+	@ResourceView(clazz=R.id.class, field="ring_image_handup")
 	public ImageView imgHandup;
-	@ResourceView(id = R.id.ring_image_answer)
+	@ResourceView(clazz=R.id.class, field="ring_image_answer")
 	public ImageView imgAnswer;
 
 

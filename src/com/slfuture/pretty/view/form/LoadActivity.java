@@ -1,6 +1,7 @@
 package com.slfuture.pretty.view.form;
 
 import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.carrie.base.type.core.ITable;
 import com.slfuture.pretty.Program;
 import com.slfuture.pretty.R;
 import com.slfuture.pretty.general.view.form.ImageActivity;
@@ -21,15 +22,15 @@ import com.slfuture.pluto.view.component.ActivityEx;
 /**
  * 引导页
  */
-@ResourceView(id=R.layout.activity_load)
+@ResourceView(clazz=R.layout.class, field="activity_load")
 public class LoadActivity extends ActivityEx {
-	@ResourceView(id=R.id.load_button_1)
+	@ResourceView(clazz=R.id.class, field="load_button_1")
 	public Button btn1;
-	@ResourceView(id=R.id.load_button_2)
+	@ResourceView(clazz=R.id.class, field="load_button_2")
 	public Button btn2;
-	@ResourceView(id=R.id.load_button_3)
+	@ResourceView(clazz=R.id.class, field="load_button_3")
 	public Button btn3;
-	@ResourceView(id=R.id.load_button_4)
+	@ResourceView(clazz=R.id.class, field="load_button_4")
 	public Button btn4;
 	
 	/**
@@ -53,13 +54,17 @@ public class LoadActivity extends ActivityEx {
 						return "柳君";
 					}
 					@Override
-					public String getAccount() {
+					public String getUserId() {
 						return "appuser_2879";
 					}
 					@Override
 					public String getPassword() {
 						return "15021819287";
 					}
+					@Override
+					public void onConflict() { }
+					@Override
+					public void onCommand(String from, String action, ITable<String, Object> data) { }
 				};
 				Module.initialize();
 				Module.login(new IEventable<Boolean>() {

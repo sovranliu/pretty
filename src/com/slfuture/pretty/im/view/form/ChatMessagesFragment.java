@@ -48,7 +48,7 @@ import android.widget.ImageView.ScaleType;
 /**
  * 对话消息窗口层
  */
-@ResourceView(id = R.layout.fragment_chat_messages)
+@ResourceView(clazz=R.layout.class, field="fragment_chat_messages")
 public class ChatMessagesFragment extends FragmentEx {
 	/**
 	 * 消息源接口
@@ -616,7 +616,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	/**
 	 * 列表控件
 	 */
-	@ResourceView(id = R.id.chatmessages_listview_messages)
+	@ResourceView(clazz=R.id.class, field="chatmessages_listview_messages")
 	public ListView listMessages;
 	/**
 	 * 数据列表

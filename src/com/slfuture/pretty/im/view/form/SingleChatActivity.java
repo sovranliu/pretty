@@ -42,17 +42,14 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import com.slfuture.pluto.config.Configuration;
-import com.slfuture.pluto.config.core.IConfig;
 import com.slfuture.pluto.sensor.SoundRecorder;
-import com.slfuture.pluto.storage.SDCard;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 
 /**
  * 单聊窗口
  */
-@ResourceView(id=R.layout.activity_singlechat)
+@ResourceView(clazz=R.layout.class, field="activity_singlechat")
 public class SingleChatActivity extends ActivityEx {
 	/**
 	 * 消息接收器
@@ -75,17 +72,17 @@ public class SingleChatActivity extends ActivityEx {
 	}
 
 
-	@ResourceView(id=R.id.singlechat_layout_tail)
+	@ResourceView(clazz=R.id.class, field="singlechat_layout_tail")
 	public View viewTail;
-	@ResourceView(id=R.id.singlechat_image_mode)
+	@ResourceView(clazz=R.id.class, field="singlechat_image_mode")
 	public ImageButton btnMode;
-	@ResourceView(id=R.id.singlechat_image_emoticon)
+	@ResourceView(clazz=R.id.class, field="singlechat_image_emoticon")
 	public ImageButton btnEmoticon;
-	@ResourceView(id=R.id.singlechat_image_more)
+	@ResourceView(clazz=R.id.class, field="singlechat_image_more")
 	public ImageButton btnMore;
-	@ResourceView(id=R.id.singlechat_text_text)
+	@ResourceView(clazz=R.id.class, field="singlechat_text_text")
 	public EditText txtText;
-	@ResourceView(id=R.id.singlechat_button_voice)
+	@ResourceView(clazz=R.id.class, field="singlechat_button_voice")
 	public Button btnVoice;
 	public ChatMoreFragment frgChatMore = null;
 	public ChatEmoticonFragment frgChatEmoticon = null;
@@ -114,11 +111,7 @@ public class SingleChatActivity extends ActivityEx {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		IConfig conf = Configuration.root().visit("/program/component/im/sound");
-		if(null == conf) {
-			throw new RuntimeException("not find config '/program/component/im/sound'");
-		}
-		recorder = new SoundRecorder(SDCard.root() + conf.get("folder"));
+		recorder = new SoundRecorder(SingleChatActivity.this.getExternalFilesDir(android.os.Environment.DIRECTORY_RINGTONES) + "/");
 		prepareParameter();
 		//
 		btnMode.setOnClickListener(new View.OnClickListener() {
