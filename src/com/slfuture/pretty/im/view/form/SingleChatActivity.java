@@ -72,6 +72,9 @@ public class SingleChatActivity extends ActivityEx {
 	}
 
 
+	
+	@ResourceView(clazz=R.id.class, field="singlechat_layout_close")
+	public View viewClose;
 	@ResourceView(clazz=R.id.class, field="singlechat_layout_tail")
 	public View viewTail;
 	@ResourceView(clazz=R.id.class, field="singlechat_image_mode")
@@ -113,6 +116,13 @@ public class SingleChatActivity extends ActivityEx {
 		super.onCreate(savedInstanceState);
 		recorder = new SoundRecorder(SingleChatActivity.this.getExternalFilesDir(android.os.Environment.DIRECTORY_RINGTONES) + "/");
 		prepareParameter();
+		//
+		viewClose.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SingleChatActivity.this.finish();
+			}
+		});
 		//
 		btnMode.setOnClickListener(new View.OnClickListener() {
 			@Override
