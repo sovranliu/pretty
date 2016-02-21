@@ -47,7 +47,7 @@ public class LoadActivity extends ActivityEx {
 				Module.reactor = new IReactor() {
 					@Override
 					public Bitmap getPhoto(String userId) {
-						return GraphicsHelper.decodeResource(LoadActivity.this, R.drawable.demo_photo);
+						return GraphicsHelper.decodeResource(LoadActivity.this, R.drawable.chat_photo_default);
 					}
 					@Override
 					public String getName(String userId) {

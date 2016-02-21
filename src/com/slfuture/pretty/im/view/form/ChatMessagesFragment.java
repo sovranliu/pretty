@@ -9,6 +9,7 @@ import com.slfuture.pluto.communication.response.ImageResponse;
 import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
+import com.slfuture.pluto.view.control.GifView;
 import com.slfuture.pretty.R;
 import com.slfuture.pretty.general.view.form.ImageActivity;
 import com.slfuture.pretty.im.Module;
@@ -32,18 +33,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ImageView.ScaleType;
 
 /**
  * 对话消息窗口层
@@ -209,7 +210,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 */
 		public Bitmap readerImage(Bitmap bitmap) {
 			final float scale = ChatMessagesFragment.this.getResources().getDisplayMetrics().density;
-			LayoutParams params = image.getLayoutParams();
+			ViewGroup.LayoutParams params = image.getLayoutParams();
 			int width = ChatMessagesFragment.this.getResources().getDisplayMetrics().widthPixels / 3;
 			if(bitmap.getWidth() < width) {
 				params.width = (int) (14  * scale + 0.5f) + bitmap.getWidth() + (int)(10 * scale + 0.5f);
@@ -631,7 +632,7 @@ public class ChatMessagesFragment extends FragmentEx {
 	/**
 	 * 加载图
 	 */
-	private ImageView loading = null;
+	private GifView loading = null;
 	/**
 	 * 短语音播放器
 	 */
@@ -716,11 +717,14 @@ public class ChatMessagesFragment extends FragmentEx {
 			}
     	});
 		RelativeLayout layout = new RelativeLayout(this.getActivity());
-		layout.setGravity(RelativeLayout.CENTER_IN_PARENT);
-		loading = new ImageView(this.getActivity());
-		loading.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		loading.setScaleType(ScaleType.FIT_XY);
-		loading.setImageResource(R.drawable.loading);
+		loading = new GifView(this.getActivity());
+		MarginLayoutParams m = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		m.setMargins(20,  20 , 20,  20);
+		LayoutParams params = new LayoutParams(m);
+		params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+		loading.setLayoutParams(params);
+		loading.setGifImage(R.drawable.loading);
 		layout.addView(loading);
 		listMessages.addHeaderView(layout);
 		listMessages.setOnScrollListener(new MessagesOnScrollListener());

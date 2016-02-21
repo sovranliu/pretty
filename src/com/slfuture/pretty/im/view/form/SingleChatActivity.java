@@ -114,9 +114,13 @@ public class SingleChatActivity extends ActivityEx {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(!EMChatManager.getInstance().isConnected()) {
+			Toast.makeText(this, "连接已断开", Toast.LENGTH_SHORT).show();
+			this.finish();
+			return;
+		}
 		recorder = new SoundRecorder(SingleChatActivity.this.getExternalFilesDir(android.os.Environment.DIRECTORY_RINGTONES) + "/");
 		prepareParameter();
-		//
 		viewClose.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -188,8 +192,10 @@ public class SingleChatActivity extends ActivityEx {
 				int action = event.getAction() & MotionEvent.ACTION_MASK;
 				if(MotionEvent.ACTION_DOWN == action) {
 					recorder.start(SingleChatActivity.this);
+					btnVoice.setText("松开发送");
 				}
 				else if(MotionEvent.ACTION_UP == action) {
+					btnVoice.setText("按住说话");
 					File file = recorder.stop();
 					if(null == file) {
 						return false;
@@ -228,6 +234,14 @@ public class SingleChatActivity extends ActivityEx {
 							message.time = DateTime.now();
 							message.text = "/" + index;
 							send(message);
+							//
+							if(null != frgChatEmoticon) {
+								FragmentManager fm = getFragmentManager();  
+						        FragmentTransaction transaction = fm.beginTransaction();
+						        transaction.detach(frgChatEmoticon);
+						        transaction.commit();
+						        frgChatEmoticon = null;
+							}
 						}
 			        };
 			        transaction.replace(R.id.singlechat_layout_panel, frgChatEmoticon);
@@ -239,13 +253,47 @@ public class SingleChatActivity extends ActivityEx {
 			        transaction.detach(frgChatEmoticon);
 			        transaction.commit();
 			        frgChatEmoticon = null;
+			        //
+			        if(null != frgChatMore) {
+				        transaction = fm.beginTransaction();
+				        transaction.replace(R.id.singlechat_layout_panel, frgChatMore);
+				        transaction.commit();
+					}
 				}
 			}
 		});
 		btnMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(null == frgChatMore) {
+				if(null != frgChatMore) {
+					FragmentManager fm = getFragmentManager();  
+			        FragmentTransaction transaction = fm.beginTransaction();
+			        transaction.detach(frgChatMore);
+			        transaction.commit();
+			        frgChatMore = null;
+			        //
+			        final RotateAnimation animation =new RotateAnimation(0f, -135f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); 
+			        animation.setDuration(500);
+			        btnMore.startAnimation(animation);
+			        animation.setAnimationListener(new AnimationListener() {
+						@Override
+						public void onAnimationStart(Animation animation) { }
+						@Override
+						public void onAnimationRepeat(Animation animation) { }
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							btnMore.clearAnimation();
+							btnMore.setImageResource(R.drawable.more);
+						}
+			        });
+			        if(null != frgChatEmoticon) {
+				        transaction = fm.beginTransaction();
+				        transaction.detach(frgChatEmoticon);
+				        transaction.commit();
+				        frgChatEmoticon = null;
+					}
+				}
+				else {
 					FragmentManager fm = getFragmentManager();  
 			        FragmentTransaction transaction = fm.beginTransaction();
 			        frgChatMore = new ChatMoreFragment() {
@@ -298,30 +346,8 @@ public class SingleChatActivity extends ActivityEx {
 						public void onAnimationRepeat(Animation animation) { }
 						@Override
 						public void onAnimationEnd(Animation animation) {
+							btnMore.clearAnimation();
 							btnMore.setImageResource(R.drawable.more_changed);
-							btnMore.clearAnimation();
-						}
-			        });
-				}
-				else {
-					FragmentManager fm = getFragmentManager();  
-			        FragmentTransaction transaction = fm.beginTransaction();
-			        transaction.detach(frgChatMore);
-			        transaction.commit();
-			        frgChatMore = null;
-			        //
-			        final RotateAnimation animation =new RotateAnimation(0f, -135f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); 
-			        animation.setDuration(500);
-			        btnMore.startAnimation(animation);
-			        animation.setAnimationListener(new AnimationListener() {
-						@Override
-						public void onAnimationStart(Animation animation) { }
-						@Override
-						public void onAnimationRepeat(Animation animation) { }
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							btnMore.setImageResource(R.drawable.more);
-							btnMore.clearAnimation();
 						}
 			        });
 				}

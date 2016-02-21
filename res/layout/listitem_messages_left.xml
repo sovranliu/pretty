@@ -54,9 +54,11 @@
 	    android:visibility="gone">
 		<ImageView
 		    android:id="@+id/messagesleft_image_voice"
-		    android:layout_width="74dp"
+		    android:layout_width="64dp"
 		    android:layout_height="40dp"
 		    android:layout_marginLeft="5dp"
+			android:paddingTop="5dp"
+			android:paddingBottom="5dp"
 			android:paddingLeft="14dp"
 			android:paddingRight="20dp"
 		    android:scaleType="fitXY"
