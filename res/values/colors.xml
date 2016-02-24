@@ -9,4 +9,6 @@
     <color name="grey_text">#ff777777</color>
     <color name="grey_line">#ffe0e0e0</color>
     <color name="grey_bg">#fff9f9f9</color>
+    <color name="main">#ff000000</color>
+	<color name="sub">#fff0f0f0</color>
 </resources>

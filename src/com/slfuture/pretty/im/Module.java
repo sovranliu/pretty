@@ -15,9 +15,11 @@ import com.easemob.EMError;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.OnNotificationClickListener;
 import com.slfuture.carrie.base.model.core.IEventable;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.pluto.etc.Controller;
@@ -53,6 +55,10 @@ public class Module {
 	/**
 	 * 通话接收器
 	 */
+	private static BroadcastReceiver messageReceiver = null;
+	/**
+	 * 通话接收器
+	 */
 	private static BroadcastReceiver dialReceiver = null;
 	/**
 	 * 命令接收器
@@ -73,7 +79,17 @@ public class Module {
 		EMChat.getInstance().init(context);
 		EMChat.getInstance().setDebugMode(true);
 		//
-		dialReceiver = new BroadcastReceiver() {
+		messageReceiver = new BroadcastReceiver() {
+           	@Override
+           	public void onReceive(Context cxt, Intent intent) {
+           		String from = intent.getStringExtra("from");
+    	        reactor.onCommand(from, "message", new Table<String, Object>());
+           	}
+        };
+        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+    	intentFilter.setPriority(3);
+        context.registerReceiver(messageReceiver, intentFilter);
+        dialReceiver = new BroadcastReceiver() {
            	@Override
            	public void onReceive(Context cxt, Intent intent) {
            		String from = intent.getStringExtra("from");
@@ -126,6 +142,16 @@ public class Module {
     		}
     	};
         EMChatManager.getInstance().addConnectionListener(connectionListener);
+        EMChatOptions option = new EMChatOptions();
+        option.setNoticeBySound(true);
+        option.setNotificationEnable(true);
+        option.setOnNotificationClickListener(new OnNotificationClickListener() {
+            @Override
+            public Intent onNotificationClick(EMMessage msg) {
+                return null;
+            }
+        });
+        EMChatManager.getInstance().setChatOptions(option);
         return true;
 	}
 
@@ -140,6 +166,10 @@ public class Module {
 		if(null != dialReceiver) {
 			context.unregisterReceiver(dialReceiver);
 			dialReceiver = null;
+		}
+		if(null != messageReceiver) {
+			context.unregisterReceiver(messageReceiver);
+			messageReceiver = null;
 		}
 		if(null != connectionListener) {
 			EMChatManager.getInstance().removeConnectionListener(connectionListener);

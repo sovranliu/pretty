@@ -426,7 +426,8 @@ public class ChatMessagesFragment extends FragmentEx {
         	IMessage message = messageList.get(position);
         	return (message.orientation() - 1) * 5 + message.type() - 1;
 		}
-        @SuppressLint("InflateParams")
+        @SuppressWarnings("unused")
+		@SuppressLint("InflateParams")
 		@Override
         public View getView(int position, View convertView, ViewGroup parent) {
         	IMessage message = messageList.get(position);
