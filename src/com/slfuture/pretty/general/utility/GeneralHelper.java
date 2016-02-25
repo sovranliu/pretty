@@ -1,16 +1,22 @@
 package com.slfuture.pretty.general.utility;
 
+import com.slfuture.carrie.base.model.core.IEventable;
+import com.slfuture.carrie.base.text.Text;
+import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pretty.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,45 +45,84 @@ public class GeneralHelper {
 	 * @param activity 上下文
 	 */
 	public static void selectImage(final Activity activity) {
-		final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+		showSelector(activity, new IEventable<Integer>() {
+			@Override
+			public void on(Integer position) {
+				switch(position) {
+				case 0:
+					String status = Environment.getExternalStorageState();
+					if (!status.equals(Environment.MEDIA_MOUNTED)) {
+						Toast.makeText(activity, "SD卡不可用", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					Intent intentCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+					activity.startActivityForResult(intentCamera, INTENT_REQUEST_CAMERA);
+					break;
+				case 1:
+					Intent intentPhone = new Intent();
+					intentPhone.setType("image/*");
+					intentPhone.setAction(Intent.ACTION_GET_CONTENT);
+					activity.startActivityForResult(intentPhone, INTENT_REQUEST_PHONE);
+					break;
+				case 2:
+					break;
+				}
+			}
+		}, "拍  照" , "手机相册", "取  消");
+	}
+
+	/**
+	 * 打开单选框
+	 * 
+	 * @param context 上下文
+	 * @param parameters 参数列表
+	 */
+	public static void showSelector(Context context, final IEventable<Integer> callback, String... parameters) {
+		final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
 		alertDialog.show();
 		Window window = alertDialog.getWindow();
 		WindowManager.LayoutParams layoutParams = window.getAttributes();
 		layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 		window.setGravity(Gravity.BOTTOM);
 		window.setAttributes(layoutParams);
-		window.setContentView(R.layout.dialog_imageselect);
-		TextView txtCancel = (TextView) window.findViewById(R.id.imageselect_cancel);
-		txtCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alertDialog.cancel();
+		LinearLayout contentLayout = new LinearLayout(context);
+		LinearLayout.LayoutParams contentLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		contentLayout.setGravity(Gravity.BOTTOM);
+		contentLayout.setOrientation(LinearLayout.VERTICAL);
+		contentLayout.setBackgroundColor(context.getResources().getColor(R.color.grey_bg));
+		boolean sentry = false;
+		int position = -1;
+		for(int i = 0; i < parameters.length; i++) {
+			String parameter = parameters[i];
+			if(Text.isBlank(parameter)) {
+				sentry = true;
+				continue;
 			}
-		});
-		TextView txtPhone = (TextView) window.findViewById(R.id.imageselect_phone);
-		txtPhone.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setType("image/*");
-				intent.setAction(Intent.ACTION_GET_CONTENT);
-				activity.startActivityForResult(intent, INTENT_REQUEST_PHONE);
-				alertDialog.hide();
+			position++;
+			TextView textView = new TextView(context);
+			textView.setText(parameter);
+			textView.setTag(position);
+			textView.setGravity(Gravity.CENTER);
+			textView.setTextColor(context.getResources().getColor(R.color.grey_text));
+			textView.setTextSize(18);
+			textView.setBackgroundColor(Color.WHITE);
+			textView.setHeight(GraphicsHelper.dip2px(context, 40));
+			LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			if(sentry) {
+				textLayoutParams.topMargin = GraphicsHelper.dip2px(context, 2);
 			}
-		});
-		TextView txtCamera = (TextView) window.findViewById(R.id.imageselect_camera);
-		txtCamera.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String status = Environment.getExternalStorageState();
-				if (!status.equals(Environment.MEDIA_MOUNTED)) {
-					Toast.makeText(activity, "SD卡不可用", Toast.LENGTH_SHORT).show();
-					return;
+			else {
+				textLayoutParams.topMargin = GraphicsHelper.dip2px(context, 1);
+			}
+			contentLayout.addView(textView,textLayoutParams);
+			textView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					callback.on((Integer) v.getTag());
+					alertDialog.cancel();
 				}
-				Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-				activity.startActivityForResult(intent, INTENT_REQUEST_CAMERA);
-				alertDialog.hide();
-			}
-		});
+			});
+		}
+		window.setContentView(contentLayout, contentLayoutParams);
 	}
 }
