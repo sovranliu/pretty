@@ -12,6 +12,8 @@ import java.util.Map.Entry;
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
+import com.easemob.EMEventListener;
+import com.easemob.EMNotifierEvent;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
@@ -154,6 +156,23 @@ public class Module {
             }
         });
         EMChatManager.getInstance().setChatOptions(option);
+        //
+        EMChatManager.getInstance().registerEventListener(new EMEventListener() {
+	        	@Override
+	        	public void onEvent(EMNotifierEvent event) {
+	        		EMMessage message = (EMMessage) event.getData();
+					if(null == reactor) {
+						return;
+					}
+	    			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+	    			Table<String, Object> data = new Table<String, Object>();
+	    			for(Entry<String, String> entry : cmdMsgBody.params.entrySet()) {
+	    				data.put(entry.getKey(), entry.getValue());
+	    			}
+					reactor.onCommand(message.getFrom(), cmdMsgBody.action, data);
+	        		message = null;
+	        	}
+        	}, new EMNotifierEvent.Event[]{EMNotifierEvent.Event.EventNewCMDMessage});
         return true;
 	}
 
