@@ -80,6 +80,12 @@ public class ImageActivity extends ActivityEx {
 	 */
 	private void showImage(Bitmap bitmap) {
 		image.setOnTouchListener(null);
+		image.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ImageActivity.this.finish();
+			}
+		});
 		image.setScaleType(ScaleType.CENTER_INSIDE);
 		image.setImageBitmap((Bitmap) bitmap);
 		Controller.doDelay(new ParameterRunnable(bitmap) {
