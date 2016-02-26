@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
+import java.util.Hashtable;
 import java.util.Map.Entry;
 
 import com.easemob.EMCallBack;
@@ -157,20 +159,44 @@ public class Module {
         });
         EMChatManager.getInstance().setChatOptions(option);
         //
-        EMChatManager.getInstance().registerEventListener(new EMEventListener() {
-	        	@Override
-	        	public void onEvent(EMNotifierEvent event) {
-	        		EMMessage message = (EMMessage) event.getData();
-					if(null == reactor) {
-						return;
+        Controller.<EMMessage>doJoin(551, new IEventable<EMMessage>() {
+			@Override
+			public void on(EMMessage message) {
+				if(null == reactor) {
+					return;
+				}
+    			Table<String, Object> data = new Table<String, Object>();
+				Field field = null;
+				try {
+					field = EMMessage.class.getDeclaredField("attributes");
+				}
+				catch (NoSuchFieldException e) { }
+				if(null != field) {
+					field.setAccessible(true);
+					Hashtable<String, Object> fields = null;
+					try {
+						fields = (Hashtable<String, Object>) field.get(message);
 					}
-	    			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-	    			Table<String, Object> data = new Table<String, Object>();
-	    			for(Entry<String, String> entry : cmdMsgBody.params.entrySet()) {
-	    				data.put(entry.getKey(), entry.getValue());
-	    			}
-					reactor.onCommand(message.getFrom(), cmdMsgBody.action, data);
-	        		message = null;
+					catch (Exception e) { }
+					if(null != fields) {
+						for(Entry<String, Object> entry : fields.entrySet()) {
+							data.put(entry.getKey(), entry.getValue());
+						}
+					}
+				}
+    			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+    			for(Entry<String, String> entry : cmdMsgBody.params.entrySet()) {
+    				data.put(entry.getKey(), entry.getValue());
+    			}
+				reactor.onCommand(message.getFrom(), cmdMsgBody.action, data);
+        		message = null;
+			}
+        });
+        EMChatManager.getInstance().registerEventListener(new EMEventListener() {
+	        	@SuppressWarnings("unchecked")
+				@Override
+	        	public void onEvent(EMNotifierEvent event) {
+	        		Controller.<EMMessage>doFork(551,  (EMMessage) event.getData());
 	        	}
         	}, new EMNotifierEvent.Event[]{EMNotifierEvent.Event.EventNewCMDMessage});
         return true;
@@ -227,14 +253,14 @@ public class Module {
 			@Override
 			public void onSuccess() {
 				Log.d("pretty", "EMChatManager.login() success");
-				Controller.doMerge(559, true);
+				Controller.<Boolean>doMerge(559, true);
 			}
 			@Override
 			public void onProgress(int progress, String status) { }
 			@Override
 			public void onError(int code, String message) {
 				Log.d("pretty", "EMChatManager.login(" + code + ", '" + message + "') error");
-				Controller.doMerge(559, false);
+				Controller.<Boolean>doMerge(559, false);
 			}
 		});
 	}
@@ -246,6 +272,9 @@ public class Module {
 	 * @return 未读消息个数
 	 */
 	public static int getUnreadMessageCount(String userId) {
+		if(null == userId) {
+			return EMChatManager.getInstance().getUnreadMsgsCount();
+		}
 		EMConversation conversation = EMChatManager.getInstance().getConversation(userId);
 		if(null == conversation) {
 			return 0;
