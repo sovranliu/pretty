@@ -66,6 +66,7 @@ public class SingleChatActivity extends ActivityEx {
 	        	// 不是本会话窗口内的消息
 	        	return;
 	        }
+	        conversation.markMessageAsRead(emMessage.getMsgId());
 	        frgChatMessages.addMessage(Message.build(emMessage, IMessage.ORIENTATION_RECEIVE));
 	        abortBroadcast();
 		}
@@ -415,6 +416,7 @@ public class SingleChatActivity extends ActivityEx {
 		java.util.List<EMMessage> emMessages = null;
 		if(null == messageId) {
 			emMessages = conversation.getAllMessages();
+			conversation.markAllMessagesAsRead();
 		}
 		else {
 			emMessages = conversation.loadMoreMsgFromDB(messageId, 20);

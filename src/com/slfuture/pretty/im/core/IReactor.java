@@ -1,6 +1,6 @@
 package com.slfuture.pretty.im.core;
 
-import com.slfuture.carrie.base.type.core.ITable;
+import com.slfuture.carrie.base.type.Table;
 
 import android.graphics.Bitmap;
 
@@ -50,5 +50,5 @@ public interface IReactor {
 	 * @param action 动作
 	 * @param data 属性
 	 */
-	public void onCommand(String from, String action, ITable<String, Object>data);
+	public void onCommand(String from, String action, Table<String, Object>data);
 }

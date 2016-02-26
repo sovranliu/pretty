@@ -141,7 +141,9 @@ public class Module {
 				}
     		}
     	};
-        EMChatManager.getInstance().addConnectionListener(connectionListener);
+    	EMChatManager.getInstance().addConnectionListener(connectionListener);
+    	EMChat.getInstance().setAppInited();
+    	//
         EMChatOptions option = new EMChatOptions();
         option.setNoticeBySound(true);
         option.setNotificationEnable(true);
@@ -188,7 +190,11 @@ public class Module {
 			@Override
 			public void on(Boolean data) {
 				if(data) {
-					EMGroupManager.getInstance().loadAllGroups();
+					if(null != commandReceiver) {
+						context.unregisterReceiver(commandReceiver);
+						commandReceiver = null;
+					}
+			    	EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
 					callback.on(true);
 				}

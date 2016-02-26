@@ -16,7 +16,6 @@ import com.slfuture.pretty.im.Module;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
-import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
@@ -105,10 +104,10 @@ public class RingActivity extends ActivityEx {
 		dialType = this.getIntent().getIntExtra("type", 0);
 		from = this.getIntent().getStringExtra("from");
 		soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+		final int soundId = soundPool.load(this, R.raw.ring, 1);
 		Controller.doDelay(new Runnable() {
 			@Override
 			public void run() {
-				int soundId = soundPool.load(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE).getPath(), 1);
 				soundPool.play(soundId, 1, 1, 0, -1, 1);
 			}
 		}, 1000);

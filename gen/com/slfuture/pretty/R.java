@@ -241,7 +241,7 @@ public final class R {
     }
     public static final class raw {
         public static int beep=0x7f040000;
-        public static int business=0x7f040001;
+        public static int ring=0x7f040001;
     }
     public static final class string {
         public static int app_name=0x7f080000;

@@ -692,6 +692,20 @@ public class ChatMessagesFragment extends FragmentEx {
 	}
 
 	/**
+	 * 刷新消息列表
+	 */
+	public void refreshList() {
+		messageList.clear();
+		if(null != chatMessageAdapter) {
+			for(IMessage message : chatMessageAdapter.onLoad(null)) {
+				messageList.add(ChatEmoticonFragment.convert(this.getActivity(), message));
+			}
+		}
+		messagesAdapter.notifyDataSetChanged();
+        listMessages.setSelection(listMessages.getCount() - 1);
+	}
+
+	/**
 	 * 界面创建
 	 */
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -731,16 +745,9 @@ public class ChatMessagesFragment extends FragmentEx {
 		listMessages.setOnScrollListener(new MessagesOnScrollListener());
 		listMessages.setOnTouchListener(new MessagesOnTouchListener());
 		loading.setVisibility(View.GONE);
-		messageList.clear();
-		if(null != chatMessageAdapter) {
-			for(IMessage message : chatMessageAdapter.onLoad(null)) {
-				messageList.add(ChatEmoticonFragment.convert(this.getActivity(), message));
-			}
-		}
 		messagesAdapter = new MessagesAdapter(this.getActivity());
 		listMessages.setAdapter(messagesAdapter);
-		messagesAdapter.notifyDataSetChanged();
-        listMessages.setSelection(listMessages.getCount() - 1);
+		refreshList();
 	}
 
     @Override
@@ -750,6 +757,13 @@ public class ChatMessagesFragment extends FragmentEx {
     		player = null;
     	}
     	super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	//
+    	refreshList();
     }
 
 	/**
