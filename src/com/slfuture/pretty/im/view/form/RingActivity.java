@@ -3,6 +3,8 @@ package com.slfuture.pretty.im.view.form;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMCallStateChangeListener.CallState;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EMNetworkUnconnectedException;
 import com.easemob.exceptions.EMNoActiveCallException;
 import com.slfuture.carrie.base.model.core.IEventable;
@@ -13,11 +15,14 @@ import com.slfuture.pluto.view.component.ActivityEx;
 import com.slfuture.pretty.R;
 import com.slfuture.pretty.im.Module;
 
+import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -86,6 +91,26 @@ public class RingActivity extends ActivityEx {
 		}
     }
 
+	@Override
+    protected void onResume() {
+    	super.onResume();
+		try {
+			KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);  
+			if(km.isKeyguardLocked()) {
+				KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unLock");
+		        kl.disableKeyguard();
+			}
+	        //获取电源管理器对象  
+	        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+	        if(!pm.isScreenOn()) {
+	            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK,"bright");
+	            wl.acquire();
+	            wl.release();
+	        }
+		}
+		catch(Exception ex) { }
+    }
+
 	/**
 	 * 界面预处理
 	 */
@@ -111,6 +136,20 @@ public class RingActivity extends ActivityEx {
 				soundPool.play(soundId, 1, 1, 0, -1, 1);
 			}
 		}, 1000);
+		if(Module.DIAL_TYPE_AUDIO == dialType) {
+			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            message.setFrom(from);
+            TextMessageBody body = new TextMessageBody("[音频通话]");
+            message.addBody(body);
+            EMChatManager.getInstance().saveMessage(message, false);
+		}
+		else if(Module.DIAL_TYPE_VIDEO == dialType) {
+			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            message.setFrom(from);
+            TextMessageBody body = new TextMessageBody("[视频通话]");
+            message.addBody(body);
+            EMChatManager.getInstance().saveMessage(message, false);
+		}
 	}
 
 	/**

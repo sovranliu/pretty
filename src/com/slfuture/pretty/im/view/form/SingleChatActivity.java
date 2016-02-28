@@ -116,7 +116,7 @@ public class SingleChatActivity extends ActivityEx {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(!EMChatManager.getInstance().isConnected()) {
-			Toast.makeText(this, "连接已断开", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "无法连接到网络", Toast.LENGTH_SHORT).show();
 			this.finish();
 			return;
 		}
@@ -201,7 +201,7 @@ public class SingleChatActivity extends ActivityEx {
 					if(null == file) {
 						return false;
 					}
-					if(recorder.duration() < 500) {
+					if(recorder.duration() < 1000) {
 						Toast.makeText(SingleChatActivity.this, "录音时间太短", Toast.LENGTH_LONG).show();
 						return false;
 					}
@@ -360,7 +360,9 @@ public class SingleChatActivity extends ActivityEx {
     protected void onDestroy() {
 		super.onDestroy();
 		//
-    	unregisterReceiver(receiver);
+		if(null != receiver) {
+	    	unregisterReceiver(receiver);
+		}
     }
 
     /**

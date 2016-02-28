@@ -153,7 +153,7 @@ public class VideoActivity extends ActivityEx {
             message.setFrom(from);
             TextMessageBody body = new TextMessageBody("[视频通话]");
             message.addBody(body);
-            EMChatManager.getInstance().saveMessage(message, false);
+            // EMChatManager.getInstance().saveMessage(message, false);
 		}
     }
 

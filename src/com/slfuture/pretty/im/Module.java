@@ -275,6 +275,32 @@ public class Module {
 	}
 
 	/**
+	 * 登出服务器
+	 * 
+	 * @param callback 回调
+	 */
+	public static void logout(final IEventable<Boolean> callback) {
+		EMChatManager.getInstance().logout(new EMCallBack() {
+			@Override
+			public void onSuccess() {
+				if(null == callback) {
+					return;
+				}
+				callback.on(true);
+			}
+			@Override
+			public void onProgress(int progress, String status) { }
+			@Override
+			public void onError(int code, String message) {
+				if(null == callback) {
+					return;
+				}
+				callback.on(false);
+			}
+		});
+	}
+
+	/**
 	 * 获取未读消息个数
 	 * 
 	 * @param userId 用户ID

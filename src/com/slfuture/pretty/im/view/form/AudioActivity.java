@@ -100,7 +100,7 @@ public class AudioActivity extends ActivityEx {
             message.setFrom(from);
             TextMessageBody body = new TextMessageBody("[音频通话]");
             message.addBody(body);
-            EMChatManager.getInstance().saveMessage(message, false);
+            // EMChatManager.getInstance().saveMessage(message, false);
 		}
 	}
 
