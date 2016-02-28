@@ -82,10 +82,14 @@ public class Module {
 	public static boolean initialize() {
 		EMChat.getInstance().init(context);
 		EMChat.getInstance().setDebugMode(true);
+		EMChat.getInstance().setAutoLogin(false);
 		//
 		messageReceiver = new BroadcastReceiver() {
            	@Override
            	public void onReceive(Context cxt, Intent intent) {
+				if(null == reactor) {
+					return;
+				}
            		String from = intent.getStringExtra("from");
     	        reactor.onCommand(from, "message", new Table<String, Object>());
            	}
@@ -96,6 +100,9 @@ public class Module {
         dialReceiver = new BroadcastReceiver() {
            	@Override
            	public void onReceive(Context cxt, Intent intent) {
+				if(null == reactor) {
+					return;
+				}
            		String from = intent.getStringExtra("from");
            		String type = intent.getStringExtra("type");
            		int dialType = Module.DIAL_TYPE_UNKNOWN;
@@ -146,7 +153,6 @@ public class Module {
     		}
     	};
     	EMChatManager.getInstance().addConnectionListener(connectionListener);
-    	EMChat.getInstance().setAppInited();
     	//
         EMChatOptions option = new EMChatOptions();
         option.setNoticeBySound(true);
@@ -196,6 +202,9 @@ public class Module {
 	        	@SuppressWarnings("unchecked")
 				@Override
 	        	public void onEvent(EMNotifierEvent event) {
+					if(null == reactor) {
+						return;
+					}
 	        		Controller.<EMMessage>doFork(551,  (EMMessage) event.getData());
 	        	}
         	}, new EMNotifierEvent.Event[]{EMNotifierEvent.Event.EventNewCMDMessage});
