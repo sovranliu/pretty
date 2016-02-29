@@ -76,6 +76,8 @@ public class SingleChatActivity extends ActivityEx {
 	
 	@ResourceView(clazz=R.id.class, field="singlechat_layout_close")
 	public View viewClose;
+	@ResourceView(clazz=R.id.class, field="singlechat_label_title")
+	public TextView labTitle;
 	@ResourceView(clazz=R.id.class, field="singlechat_layout_tail")
 	public View viewTail;
 	@ResourceView(clazz=R.id.class, field="singlechat_image_mode")
@@ -128,6 +130,9 @@ public class SingleChatActivity extends ActivityEx {
 				SingleChatActivity.this.finish();
 			}
 		});
+		if(null != remoteId && null != Module.reactor) {
+			labTitle.setText(Module.reactor.getName(remoteId));
+		}
 		//
 		btnMode.setOnClickListener(new View.OnClickListener() {
 			@Override
