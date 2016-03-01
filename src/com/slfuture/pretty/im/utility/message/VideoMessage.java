@@ -10,8 +10,8 @@ public class VideoMessage extends Message {
 	 * 持续时长
 	 */
 	public long duration = 0;
-
-
+	
+	
 	/**
 	 * 获取消息类型
 	 * 

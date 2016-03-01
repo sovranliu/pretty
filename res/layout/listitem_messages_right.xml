@@ -3,16 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-	android:paddingTop="20dp"
+	android:paddingTop="10dp"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:background="@color/white">
+	<TextView
+	    android:id="@+id/messagesright_label_time"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginBottom="10dp"
+	    android:layout_centerHorizontal="true"
+	    android:paddingLeft="3dp"
+	    android:paddingRight="3dp"
+	    android:paddingTop="1dp"
+	    android:paddingBottom="1dp"
+	    android:background="@drawable/background_chat_time"
+	    android:text="上午 11:25" 
+	    android:textSize="12sp"
+	    android:visibility="gone" />
 	<ImageView
 	    android:id="@+id/messagesright_image_photo"
 	    android:layout_width="50dp"
 	    android:layout_height="50dp"
 	    android:layout_alignParentRight="true"
-	    android:layout_alignParentTop="true"
+	    android:layout_below="@id/messagesright_label_time"
 	    android:scaleType="fitXY"
 	    android:src="@drawable/chat_photo_default" />
 	<RelativeLayout
@@ -20,6 +35,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_toLeftOf="@id/messagesright_image_photo"
+	    android:layout_below="@id/messagesright_label_time"
 	    android:visibility="gone">
 		<TextView
 		    android:id="@+id/messagesright_label_message"
@@ -28,6 +44,7 @@
 		    android:text="你好世界" 
 		    android:background="@drawable/messagesright_bg"
 		    android:gravity="left|center_vertical"
+		    android:textIsSelectable="true"
 		    android:textSize="16sp" />
 	</RelativeLayout>
 	<RelativeLayout
@@ -35,6 +52,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_toLeftOf="@id/messagesright_image_photo"
+	    android:layout_below="@id/messagesright_label_time"
 	    android:visibility="gone">
 		<ImageView
 		    android:id="@+id/messagesright_image_message"
@@ -51,6 +69,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_toLeftOf="@id/messagesright_image_photo"
+	    android:layout_below="@id/messagesright_label_time"
 	    android:visibility="gone">
 		<TextView
 		    android:id="@+id/messagesright_label_voice"
@@ -75,4 +94,14 @@
 		    android:background="@drawable/messagesright_bg"
 		    android:src="@drawable/voice_right_stop" />
 	</RelativeLayout>
+	<ImageView
+	    android:id="@+id/messagesright_image_status"
+	    android:layout_width="20dp"
+	    android:layout_height="20dp"
+	    android:layout_toRightOf="@id/messagesright_layout_text"
+	    android:layout_below="@id/messagesright_label_time"
+	    android:scaleType="centerInside"
+	    android:src="@drawable/icon_error"
+	    android:layout_marginTop="12dp"
+	    android:visibility="gone" />
 </RelativeLayout>

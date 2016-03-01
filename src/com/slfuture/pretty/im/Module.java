@@ -166,6 +166,7 @@ public class Module {
         EMChatManager.getInstance().setChatOptions(option);
         //
         Controller.<EMMessage>doJoin(551, new IEventable<EMMessage>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void on(EMMessage message) {
 				if(null == reactor) {
@@ -199,8 +200,7 @@ public class Module {
 			}
         });
         EMChatManager.getInstance().registerEventListener(new EMEventListener() {
-	        	@SuppressWarnings("unchecked")
-				@Override
+	        	@Override
 	        	public void onEvent(EMNotifierEvent event) {
 					if(null == reactor) {
 						return;

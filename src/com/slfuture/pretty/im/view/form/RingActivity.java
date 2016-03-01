@@ -91,6 +91,7 @@ public class RingActivity extends ActivityEx {
 		}
     }
 
+	@SuppressWarnings("deprecation")
 	@Override
     protected void onResume() {
     	super.onResume();

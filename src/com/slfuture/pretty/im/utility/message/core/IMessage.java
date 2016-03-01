@@ -40,6 +40,19 @@ public interface IMessage {
 	 */
 	public final static int ORIENTATION_RECEIVE = 2;
 
+	/**
+	 * 发送失败
+	 */
+	public final static int SENDSTATUS_FAIL = -1;
+	/**
+	 * 发送成功，对方未读
+	 */
+	public final static int SENDSTATUS_UNREAD = 0;
+	/**
+	 * 发送成功，对方已读
+	 */
+	public final static int SENDSTATUS_HASREAD = 1;
+
 
 	/**
 	 * 获取消息ID
@@ -75,4 +88,11 @@ public interface IMessage {
 	 * @return 消息发送时间
 	 */
 	public DateTime time();
+
+	/**
+	 * 获取投递状态
+	 * 
+	 * @return 投递状态
+	 */
+	public int sendStatus();
 }

@@ -16,6 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -114,7 +118,7 @@ public class GeneralHelper {
 			else {
 				textLayoutParams.topMargin = GraphicsHelper.dip2px(context, 1);
 			}
-			contentLayout.addView(textView,textLayoutParams);
+			contentLayout.addView(textView, textLayoutParams);
 			textView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -124,5 +128,35 @@ public class GeneralHelper {
 			});
 		}
 		window.setContentView(contentLayout, contentLayoutParams);
+	}
+	
+	/**
+	 * 打开单选框
+	 * 
+	 * @param context 上下文
+	 */
+	public static AlertDialog showWaiting(Context context) {
+		final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+		alertDialog.show();
+		Window window = alertDialog.getWindow();
+		WindowManager.LayoutParams layoutParams = window.getAttributes();
+		layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+		layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+		window.setGravity(Gravity.CENTER);
+		window.setAttributes(layoutParams);
+		window.setContentView(R.layout.dialog_waiting);
+		ViewGroup background = (ViewGroup) window.findViewById(R.id.waiting_layout_background);
+		background.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				alertDialog.cancel();
+			}
+		});
+		ImageView icon = (ImageView) window.findViewById(R.id.waiting_image_icon);
+		final RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); 
+        animation.setDuration(1000);
+        animation.setRepeatCount(Animation.INFINITE);
+        icon.startAnimation(animation);
+        return alertDialog;
 	}
 }

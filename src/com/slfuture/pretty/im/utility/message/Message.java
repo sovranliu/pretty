@@ -29,6 +29,10 @@ public abstract class Message implements IMessage {
 	 * 消息发送时间
 	 */
 	public DateTime time;
+	/**
+	 * 消息发送状态
+	 */
+	public int sendStatus = SENDSTATUS_HASREAD;
 
 
 	/**
@@ -72,6 +76,16 @@ public abstract class Message implements IMessage {
 	}
 
 	/**
+	 * 获取投递状态
+	 * 
+	 * @return 投递状态
+	 */
+	@Override
+	public int sendStatus() {
+		return sendStatus;
+	}
+
+	/**
 	 * 构建消息对象
 	 * 
 	 * @param message 环信消息对象
@@ -87,6 +101,19 @@ public abstract class Message implements IMessage {
         	textMessage.orientation = orientation;
         	textMessage.time = DateTime.parse(message.getMsgTime());
         	textMessage.text = ((TextMessageBody) message.getBody()).getMessage();
+        	if(Message.ORIENTATION_SEND == orientation) {
+        		if(EMMessage.Status.FAIL == message.status) {
+        			textMessage.sendStatus = Message.SENDSTATUS_FAIL;
+            	}
+            	else {
+        			if(message.isAcked()) {
+            			textMessage.sendStatus = Message.SENDSTATUS_HASREAD;
+                	}
+        			else {
+            			textMessage.sendStatus = Message.SENDSTATUS_UNREAD;
+        			}
+            	}
+        	}
         	return textMessage;
         case IMAGE:
         	ImageMessage imageMessage = new ImageMessage();
@@ -105,12 +132,26 @@ public abstract class Message implements IMessage {
         	if("null".equals(imageMessage.originalUrl)) {
         		imageMessage.originalUrl = null;
         	}
+        	if(Message.ORIENTATION_SEND == orientation) {
+        		if(EMMessage.Status.FAIL == message.status) {
+            		imageMessage.sendStatus = Message.SENDSTATUS_FAIL;
+            	}
+            	else {
+        			if(message.isAcked()) {
+        				imageMessage.sendStatus = Message.SENDSTATUS_HASREAD;
+                	}
+        			else {
+        				imageMessage.sendStatus = Message.SENDSTATUS_UNREAD;
+        			}
+            	}
+        	}
         	return imageMessage;
         case VOICE:
         	VoiceMessage voiceMessage = new VoiceMessage();
         	voiceMessage.id = message.getMsgId();
         	voiceMessage.from = message.getFrom();
         	voiceMessage.orientation = orientation;
+        	voiceMessage.emMessage = message;
         	voiceMessage.time = DateTime.parse(message.getMsgTime());
         	VoiceMessageBody body = (VoiceMessageBody) message.getBody();
         	voiceMessage.length = body.getLength();
@@ -119,6 +160,22 @@ public abstract class Message implements IMessage {
         	}
         	if(null != body.getRemoteUrl() && !"null".equals(body.getRemoteUrl())) {
         		voiceMessage.url = body.getRemoteUrl();
+        	}
+        	if(Message.ORIENTATION_SEND == orientation) {
+        		if(EMMessage.Status.FAIL == message.status) {
+            		voiceMessage.sendStatus = Message.SENDSTATUS_FAIL;
+            	}
+            	else {
+        			if(message.isAcked()) {
+        				voiceMessage.sendStatus = Message.SENDSTATUS_HASREAD;
+                	}
+        			else {
+        				voiceMessage.sendStatus = Message.SENDSTATUS_UNREAD;
+        			}
+            	}
+        	}
+        	else {
+        		voiceMessage.hasListened = message.isListened();
         	}
         	return voiceMessage;
         case VIDEO:

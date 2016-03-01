@@ -22,6 +22,14 @@ public class VoiceMessage extends Message {
 	 * 录音文件
 	 */
 	public File file = null;
+	/**
+	 * 消息是否已收听
+	 */
+	public boolean hasListened = true;
+	/**
+	 * 环信消息对象
+	 */
+	public EMMessage emMessage = null;
 
 
 	/**
@@ -32,6 +40,27 @@ public class VoiceMessage extends Message {
 	@Override
 	public int type() {
 		return IMessage.TYPE_VOICE;
+	}
+
+	/**
+	 * 获取消息是否已收听
+	 * 
+	 * @return 消息是否已收听
+	 */
+	public boolean hasListened() {
+		return hasListened;
+	}
+
+	/**
+	 * 获取消息是否已收听
+	 * 
+	 * @param hasListened 消息是否已收听
+	 */
+	public void setHasListened(boolean hasListened) {
+		this.hasListened = hasListened;
+		if(null != emMessage) {
+			emMessage.setListened(hasListened);
+		}
 	}
 
 	/**

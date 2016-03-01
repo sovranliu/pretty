@@ -2,6 +2,7 @@ package com.slfuture.pretty.im.view.form;
 
 import java.io.File;
 
+import com.slfuture.carrie.base.time.Date;
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.pluto.communication.Host;
 import com.slfuture.pluto.communication.response.FileResponse;
@@ -85,6 +86,10 @@ public class ChatMessagesFragment extends FragmentEx {
 	 */
 	private abstract class ViewHolder {
 		/**
+		 * 时间
+		 */
+		public TextView time;
+		/**
 		 * 头像
 		 */
 		public ImageView photo;
@@ -100,13 +105,93 @@ public class ChatMessagesFragment extends FragmentEx {
 		 * 短语音视图
 		 */
 		public ViewGroup layoutVoice;
+		/**
+		 * 状态
+		 */
+		public ImageView status;
+
 
 		/**
 		 * 渲染当前视图
 		 * 
 		 * @param message 消息对象
 		 */
-		public abstract void render(IMessage message);
+		public void render(IMessage message) {
+			long lastMessageTime = 0;
+			for(int i = 0; i < messageList.size(); i++) {
+				IMessage item = messageList.get(i);
+				if(item == message) {
+					if(i > 0) {
+						lastMessageTime = messageList.get(i - 1).time().toLong();
+					}
+					break;
+				}
+			}
+			if(Math.abs(message.time().toLong() - lastMessageTime) > 1000 * 60 * 10) {
+				if(message.time().getDate().toInteger() == Date.now().toInteger()) {
+					time.setText(message.time().toString("HH:mm"));
+				}
+				else {
+					time.setText(message.time().toString("MM-dd HH:mm"));
+				}
+				time.setVisibility(View.VISIBLE);
+			}
+			else {
+				time.setVisibility(View.GONE);
+			}
+			lastMessageTime = message.time().toLong();
+			//
+			if(IMessage.ORIENTATION_SEND == message.orientation() && IMessage.SENDSTATUS_FAIL == message.sendStatus()) {
+				status.setImageResource(R.drawable.icon_error);
+				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) status.getLayoutParams();
+				layoutParams.addRule(RelativeLayout.LEFT_OF, 0);
+				layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+//				layoutParams.removeRule(RelativeLayout.LEFT_OF);
+//				layoutParams.removeRule(RelativeLayout.RIGHT_OF);
+				if(IMessage.TYPE_TEXT == message.type()) {
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.messagesright_layout_text);
+					status.setVisibility(View.VISIBLE);
+				}
+				else if(IMessage.TYPE_IMAGE == message.type()) {
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.messagesright_layout_image);
+					status.setVisibility(View.VISIBLE);
+				}
+				else if(IMessage.TYPE_VOICE == message.type()) {
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.messagesright_layout_voice);
+					status.setVisibility(View.VISIBLE);
+				}
+				else {
+					status.setVisibility(View.GONE);
+				}
+			}
+			else if(IMessage.ORIENTATION_RECEIVE == message.orientation() && IMessage.TYPE_VOICE == message.type() && !((VoiceMessage) message).hasListened()) {
+				status.setImageResource(R.drawable.icon_dot_red);
+				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) status.getLayoutParams();
+				layoutParams.addRule(RelativeLayout.LEFT_OF, 0);
+				layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+//				layoutParams.removeRule(RelativeLayout.LEFT_OF);
+//				layoutParams.removeRule(RelativeLayout.RIGHT_OF);
+				if(IMessage.TYPE_TEXT == message.type()) {
+					layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.messagesleft_layout_text);
+					status.setVisibility(View.VISIBLE);
+				}
+				else if(IMessage.TYPE_IMAGE == message.type()) {
+					layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.messagesleft_layout_image);
+					status.setVisibility(View.VISIBLE);
+				}
+				else if(IMessage.TYPE_VOICE == message.type()) {
+					layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.messagesleft_layout_voice);
+					status.setVisibility(View.VISIBLE);
+				}
+				else {
+					status.setVisibility(View.GONE);
+				}
+			}
+			else {
+				status.setVisibility(View.GONE);
+				return;
+			}
+		}
 	}
 
 	/**
@@ -125,6 +210,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 */
 		@Override
 		public void render(IMessage message) {
+			super.render(message);
 			layoutText.setVisibility(View.VISIBLE);
 			layoutImage.setVisibility(View.GONE);
 			layoutVoice.setVisibility(View.GONE);
@@ -146,6 +232,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 * 渲染当前视图
 		 */
 		public void render(IMessage message) {
+			super.render(message);
 			layoutText.setVisibility(View.GONE);
 			layoutImage.setVisibility(View.VISIBLE);
 			layoutVoice.setVisibility(View.GONE);
@@ -243,6 +330,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 * 渲染当前视图
 		 */
 		public void render(IMessage message) {
+			super.render(message);
 			layoutText.setVisibility(View.GONE);
 			layoutImage.setVisibility(View.GONE);
 			layoutVoice.setVisibility(View.VISIBLE);
@@ -283,6 +371,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 */
 		@Override
 		public void render(IMessage message) {
+			super.render(message);
 			layoutText.setVisibility(View.VISIBLE);
 			layoutImage.setVisibility(View.GONE);
 			layoutVoice.setVisibility(View.GONE);
@@ -307,6 +396,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		 */
 		@Override
 		public void render(IMessage message) {
+			super.render(message);
 			layoutText.setVisibility(View.VISIBLE);
 			layoutImage.setVisibility(View.GONE);
 			layoutVoice.setVisibility(View.GONE);
@@ -452,17 +542,21 @@ public class ChatMessagesFragment extends FragmentEx {
             	}
                 if(IMessage.ORIENTATION_SEND == message.orientation()) {
                 	convertView = inflater.inflate(R.layout.listitem_messages_right, null);
-                    holder.photo = (ImageView)convertView.findViewById(R.id.messagesright_image_photo);
+                	holder.time = (TextView) convertView.findViewById(R.id.messagesright_label_time);
+                    holder.photo = (ImageView) convertView.findViewById(R.id.messagesright_image_photo);
                     holder.layoutText = (ViewGroup) convertView.findViewById(R.id.messagesright_layout_text);
                     holder.layoutImage = (ViewGroup) convertView.findViewById(R.id.messagesright_layout_image);
                     holder.layoutVoice = (ViewGroup) convertView.findViewById(R.id.messagesright_layout_voice);
+                    holder.status = (ImageView) convertView.findViewById(R.id.messagesright_image_status);
                 }
                 else if(IMessage.ORIENTATION_RECEIVE == message.orientation()) {
                 	convertView = inflater.inflate(R.layout.listitem_messages_left, null);
-                    holder.photo = (ImageView)convertView.findViewById(R.id.messagesleft_image_photo);
+                	holder.time = (TextView) convertView.findViewById(R.id.messagesleft_label_time);
+                    holder.photo = (ImageView) convertView.findViewById(R.id.messagesleft_image_photo);
                     holder.layoutText = (ViewGroup) convertView.findViewById(R.id.messagesleft_layout_text);
                     holder.layoutImage = (ViewGroup) convertView.findViewById(R.id.messagesleft_layout_image);
                     holder.layoutVoice = (ViewGroup) convertView.findViewById(R.id.messagesleft_layout_voice);
+                    holder.status = (ImageView) convertView.findViewById(R.id.messagesleft_image_status);
                 }
                 holder.photo.setOnClickListener(new View.OnClickListener() {
 	                @Override
@@ -497,7 +591,6 @@ public class ChatMessagesFragment extends FragmentEx {
             		else if(IMessage.ORIENTATION_RECEIVE == message.orientation()) {
             			imageHolder.image = (ImageView) convertView.findViewById(R.id.messagesleft_image_message);
                 	}
-            		// imageHolder.image.setTag(position);
             		imageHolder.image.setOnClickListener(new View.OnClickListener() {
     					@Override
     					public void onClick(View v) {
@@ -545,6 +638,22 @@ public class ChatMessagesFragment extends FragmentEx {
     						if(null == voiceMessage.file) {
     							Toast.makeText(ChatMessagesFragment.this.getActivity(), "语音尚未下载结束", Toast.LENGTH_LONG).show();
     							return;
+    						}
+    						if(false == voiceMessage.hasListened()) {
+        						voiceMessage.setHasListened(true);
+        						ViewGroup parent = (ViewGroup) v.getParent().getParent();
+        						if(IMessage.ORIENTATION_RECEIVE == voiceMessage.orientation()) {
+            						View view = parent.findViewById(R.id.messagesleft_image_status);
+            						if(null != view) {
+            							view.setVisibility(View.GONE);
+            						}
+        						}
+        						else {
+        							View view = parent.findViewById(R.id.messagesright_image_status);
+            						if(null != view) {
+            							view.setVisibility(View.GONE);
+            						}
+        						}
     						}
     						ImageView imageView = (ImageView) v;
     						if(null != playingView && playingView.getDrawable() instanceof AnimationDrawable) {
