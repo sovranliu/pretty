@@ -4,12 +4,12 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:background="#00000000">
+    android:background="@color/black">
     <ImageView
         android:id="@+id/waiting_image_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:scaleType="fitXY"
+        android:scaleType="centerInside"
     	android:src="@drawable/waiting" />
 </RelativeLayout>
