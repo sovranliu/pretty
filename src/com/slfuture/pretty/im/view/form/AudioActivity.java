@@ -88,6 +88,17 @@ public class AudioActivity extends ActivityEx {
 			}
 			catch (Exception e) { }
 		}
+	}
+
+	/**
+	 * 界面预处理
+	 */
+	public void prepare() {
+		prepareData();
+		prepareMute();
+		prepareSpeaker();
+		prepareHandUp();
+		prepareName();
 		if(isCaller) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             message.setReceipt(from);
@@ -102,17 +113,6 @@ public class AudioActivity extends ActivityEx {
             message.addBody(body);
             // EMChatManager.getInstance().saveMessage(message, false);
 		}
-	}
-
-	/**
-	 * 界面预处理
-	 */
-	public void prepare() {
-		prepareData();
-		prepareMute();
-		prepareSpeaker();
-		prepareHandUp();
-		prepareName();
 	}
 	
 	/**

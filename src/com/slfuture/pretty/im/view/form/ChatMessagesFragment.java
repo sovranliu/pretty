@@ -127,7 +127,7 @@ public class ChatMessagesFragment extends FragmentEx {
 					break;
 				}
 			}
-			if(Math.abs(message.time().toLong() - lastMessageTime) > 1000 * 60 * 10) {
+			if(Math.abs(message.time().toLong() - lastMessageTime) > 1000 * 60 * 5) {
 				if(message.time().getDate().toInteger() == Date.now().toInteger()) {
 					time.setText(message.time().toString("HH:mm"));
 				}

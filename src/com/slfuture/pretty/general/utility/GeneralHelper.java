@@ -154,7 +154,7 @@ public class GeneralHelper {
 		});
 		ImageView icon = (ImageView) window.findViewById(R.id.waiting_image_icon);
 		final RotateAnimation animation = new RotateAnimation(0f, 720f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); 
-        animation.setDuration(1000);
+        animation.setDuration(2000);
         animation.setRepeatCount(Animation.INFINITE);
         icon.startAnimation(animation);
         return alertDialog;

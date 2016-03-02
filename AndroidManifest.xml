@@ -32,6 +32,7 @@
 		<activity android:name="com.slfuture.pretty.im.view.form.VideoActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.im.view.form.RingActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 		<activity android:name="com.slfuture.pretty.general.view.form.ImageActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+		<activity android:name="com.slfuture.pretty.qcode.view.form.CaptureActivity" android:screenOrientation="landscape" android:configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateAlwaysHidden" />
 		<!-- 环信相关 -->
     	<meta-data android:name="EASEMOB_APPKEY" android:value="wehopim#wehop" />
     	<service android:name="com.easemob.chat.EMChatService" />

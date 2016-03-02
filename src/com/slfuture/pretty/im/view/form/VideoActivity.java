@@ -140,7 +140,18 @@ public class VideoActivity extends ActivityEx {
 			cameraHelper.stopCapture();
     	}
 		cameraHelper = null;
-		//
+    }
+
+	/**
+	 * 界面预处理
+	 */
+	public void prepare() {
+		prepareData();
+		prepareMute();
+		prepareSpeaker();
+		prepareHandUp();
+		prepareVideo();
+		prepareName();
 		if(isCaller) {
 			EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             message.setReceipt(from);
@@ -155,18 +166,6 @@ public class VideoActivity extends ActivityEx {
             message.addBody(body);
             // EMChatManager.getInstance().saveMessage(message, false);
 		}
-    }
-
-	/**
-	 * 界面预处理
-	 */
-	public void prepare() {
-		prepareData();
-		prepareMute();
-		prepareSpeaker();
-		prepareHandUp();
-		prepareVideo();
-		prepareName();
 		if(isCaller) {
 			call();
 		}

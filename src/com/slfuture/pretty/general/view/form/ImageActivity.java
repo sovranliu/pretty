@@ -3,6 +3,7 @@ package com.slfuture.pretty.general.view.form;
 import java.io.File;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -50,7 +51,10 @@ public class ImageActivity extends ActivityEx {
 		String path = this.getIntent().getStringExtra("path");
 		String url = this.getIntent().getStringExtra("url");
 		if(null != path) {
-			Bitmap bitmap = GraphicsHelper.decodeFile(new File(path));
+			WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+			int width = windowManager.getDefaultDisplay().getWidth();
+			int height = windowManager.getDefaultDisplay().getHeight();
+			Bitmap bitmap = GraphicsHelper.decodeFile(new File(path), width, height);
 			if(null != bitmap) {
 				showImage(bitmap);
 			}
@@ -80,18 +84,17 @@ public class ImageActivity extends ActivityEx {
 	 */
 	private void showImage(Bitmap bitmap) {
 		image.setOnTouchListener(null);
-		image.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ImageActivity.this.finish();
-			}
-		});
 		image.setScaleType(ScaleType.CENTER_INSIDE);
 		image.setImageBitmap((Bitmap) bitmap);
 		Controller.doDelay(new ParameterRunnable(bitmap) {
 			@Override
 			public void run() {
-				image.setOnTouchListener(new MulitPointTouchListener ());
+				image.setOnTouchListener(new MulitPointTouchListener () {
+					@Override
+					public void onClick(View v) {
+						ImageActivity.this.finish();
+					}  
+				});
 				image.setScaleType(ScaleType.MATRIX);
 			}
 		}, 1000);
