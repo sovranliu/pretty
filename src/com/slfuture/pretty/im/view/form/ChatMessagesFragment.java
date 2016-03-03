@@ -848,7 +848,7 @@ public class ChatMessagesFragment extends FragmentEx {
 		params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
 		loading.setLayoutParams(params);
-		loading.setGifImage(R.drawable.loading);
+		loading.setGifImage(R.drawable.icon_loading);
 		layout.addView(loading);
 		listMessages.addHeaderView(layout);
 		listMessages.setOnScrollListener(new MessagesOnScrollListener());

@@ -44,6 +44,7 @@ public class ImageActivity extends ActivityEx {
 	/**
 	 * 界面创建
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
