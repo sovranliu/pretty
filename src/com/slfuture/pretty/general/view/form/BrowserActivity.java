@@ -16,6 +16,7 @@ import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 import com.slfuture.pluto.view.control.GifView;
 import com.slfuture.pretty.R;
+import com.slfuture.pretty.general.core.IBrowserHandler;
 import com.slfuture.pretty.general.view.control.Browser;
 
 /**
@@ -116,6 +117,19 @@ public class BrowserActivity extends ActivityEx {
 	 */
 	public void prepareData() {
 		this.url = this.getIntent().getStringExtra("url");
+		Bundle bundle = this.getIntent().getBundleExtra("handler");
+		if(null == bundle) {
+			return;
+		}
+		int i = 0;
+		while(true) {
+			if(!bundle.containsKey(String.valueOf(i))) {
+				break;
+			}
+			IBrowserHandler handler = (IBrowserHandler) bundle.getSerializable(String.valueOf(i));
+			browser.register(handler);
+			i++;
+		}
 	}
 
 	/**
@@ -135,14 +149,28 @@ public class BrowserActivity extends ActivityEx {
 	                browser.pauseTimers();
 	                return false;
 	            }
+				else if(url.startsWith("new://")) {
+					Intent intent = new Intent(BrowserActivity.this, BrowserActivity.class);
+					intent.putExtra("url", url.substring("new://".length()));
+					Bundle bundle = BrowserActivity.this.getIntent().getBundleExtra("handler");
+					if(null != bundle) {
+						intent.putExtra("handler", bundle);
+					}
+					startActivity(intent);
+	                browser.pauseTimers();
+	                return false;
+				}
 				browser.loadUrl(url);
 	            return true;
 			}
-
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 				super.onReceivedError(view, errorCode, description, failingUrl);
 				browser.loadUrl("about:blank");
+			}
+			@Override 
+	        public void onPageFinished(WebView view, String url) {  
+				view.loadUrl("javascript: var allLinks = document.getElementsByTagName('a'); if (allLinks) {var i;for (i=0; i<allLinks.length; i++) {var link = allLinks[i];var target = link.getAttribute('target'); if (target && target == '_blank') {link.setAttribute('target','_self');link.href = 'new://'+link.href;}}}"); 
 			}
 		});
 		browser.setDefaultHandler(new com.slfuture.pluto.js.DefaultHandler());
