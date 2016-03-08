@@ -7,6 +7,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EMNetworkUnconnectedException;
 import com.easemob.exceptions.EMNoActiveCallException;
+import com.slfuture.carrie.base.etc.Serial;
 import com.slfuture.carrie.base.model.core.IEventable;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pluto.etc.GraphicsHelper;
@@ -140,7 +141,8 @@ public class RingActivity extends ActivityEx {
 		if(Module.DIAL_TYPE_AUDIO == dialType) {
 			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(from);
-            message.setReceipt(Module.reactor.getUserId());
+            // message.setTo(Module.reactor.getUserId());
+            message.setMsgId(Serial.makeSerialString());
             TextMessageBody body = new TextMessageBody("[音频通话]");
             message.addBody(body);
             EMChatManager.getInstance().saveMessage(message, false);
@@ -148,7 +150,8 @@ public class RingActivity extends ActivityEx {
 		else if(Module.DIAL_TYPE_VIDEO == dialType) {
 			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(from);
-            message.setReceipt(Module.reactor.getUserId());
+            message.setMsgId(Serial.makeSerialString());
+            // message.setTo(Module.reactor.getUserId());
             TextMessageBody body = new TextMessageBody("[视频通话]");
             message.addBody(body);
             EMChatManager.getInstance().saveMessage(message, false);
