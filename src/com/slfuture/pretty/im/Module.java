@@ -136,7 +136,7 @@ public class Module {
     		}
     	};
     	context.registerReceiver(commandReceiver, new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction()));
-        connectionListener = new EMConnectionListener() {
+    	connectionListener = new EMConnectionListener() {
     	    @Override
     		public void onConnected() {
     	    	Log.d("pretty", "EMConnectionListener.onConnected()");
@@ -244,10 +244,7 @@ public class Module {
 			@Override
 			public void on(Boolean data) {
 				if(data) {
-					if(null != commandReceiver) {
-						context.unregisterReceiver(commandReceiver);
-						commandReceiver = null;
-					}
+					EMChat.getInstance().setAppInited();
 			    	EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
 					callback.on(true);
