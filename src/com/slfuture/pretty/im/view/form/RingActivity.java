@@ -141,7 +141,6 @@ public class RingActivity extends ActivityEx {
 		if(Module.DIAL_TYPE_AUDIO == dialType) {
 			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(from);
-            // message.setTo(Module.reactor.getUserId());
             message.setMsgId(Serial.makeSerialString());
             TextMessageBody body = new TextMessageBody("[音频通话]");
             message.addBody(body);
@@ -151,7 +150,6 @@ public class RingActivity extends ActivityEx {
 			EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(from);
             message.setMsgId(Serial.makeSerialString());
-            // message.setTo(Module.reactor.getUserId());
             TextMessageBody body = new TextMessageBody("[视频通话]");
             message.addBody(body);
             EMChatManager.getInstance().saveMessage(message, false);
