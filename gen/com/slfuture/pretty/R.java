@@ -154,10 +154,10 @@ public final class R {
          */
         public static int auto_focus=0x7f070000;
         public static int browser_image_back=0x7f070014;
-        public static int browser_image_forward=0x7f070017;
+        public static int browser_image_forward=0x7f070016;
         public static int browser_image_loading=0x7f07001a;
         public static int browser_label_close=0x7f070015;
-        public static int browser_label_title=0x7f070016;
+        public static int browser_label_title=0x7f070017;
         public static int browser_layout_header=0x7f070013;
         public static int browser_layout_loading=0x7f070019;
         public static int browser_web=0x7f070018;
