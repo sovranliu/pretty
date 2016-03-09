@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.RotateAnimation;
@@ -172,6 +173,26 @@ public class SingleChatActivity extends ActivityEx {
 			        inputMethodManager.hideSoftInputFromWindow(txtText.getWindowToken(), 0);
 				}
 				return false;
+			}
+		});
+		txtText.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus) {
+					FragmentManager fm = getFragmentManager();
+					if(null != frgChatMore) {
+						FragmentTransaction transaction = fm.beginTransaction();
+				        transaction.detach(frgChatMore);
+				        transaction.commit();
+				        frgChatMore = null;
+					}
+					if(null != frgChatEmoticon) {
+						FragmentTransaction transaction = fm.beginTransaction();
+				        transaction.detach(frgChatEmoticon);
+				        transaction.commit();
+				        frgChatEmoticon = null;
+					}
+				}
 			}
 		});
 		//
