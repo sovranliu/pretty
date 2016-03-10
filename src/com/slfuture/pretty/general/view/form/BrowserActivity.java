@@ -186,7 +186,7 @@ public class BrowserActivity extends ActivityEx {
 			@Override  
             public void onReceivedTitle(WebView view, String title) {  
                 super.onReceivedTitle(view, title);
-                if(Text.isBlank(title)) {
+                if(Text.isBlank(title) || "HIDE".equalsIgnoreCase(title)) {
                 	header.setVisibility(View.GONE);
                 }
                 else {

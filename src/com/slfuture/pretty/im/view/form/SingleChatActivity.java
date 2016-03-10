@@ -149,6 +149,24 @@ public class SingleChatActivity extends ActivityEx {
 			}
 		});
 		//
+		txtText.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FragmentManager fm = getFragmentManager();
+				if(null != frgChatMore) {
+					FragmentTransaction transaction = fm.beginTransaction();
+			        transaction.detach(frgChatMore);
+			        transaction.commit();
+			        frgChatMore = null;
+				}
+				if(null != frgChatEmoticon) {
+					FragmentTransaction transaction = fm.beginTransaction();
+			        transaction.detach(frgChatEmoticon);
+			        transaction.commit();
+			        frgChatEmoticon = null;
+				}
+			}
+		});
 		txtText.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -249,6 +267,8 @@ public class SingleChatActivity extends ActivityEx {
 		btnEmoticon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		        inputMethodManager.hideSoftInputFromWindow(txtText.getWindowToken(), 0);
 				if(null == frgChatEmoticon) {
 					FragmentManager fm = getFragmentManager();  
 			        FragmentTransaction transaction = fm.beginTransaction();
@@ -292,6 +312,8 @@ public class SingleChatActivity extends ActivityEx {
 		btnMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		        inputMethodManager.hideSoftInputFromWindow(txtText.getWindowToken(), 0);
 				if(null != frgChatMore) {
 					FragmentManager fm = getFragmentManager();  
 			        FragmentTransaction transaction = fm.beginTransaction();
