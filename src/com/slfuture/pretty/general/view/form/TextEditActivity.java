@@ -9,6 +9,7 @@ import com.slfuture.pretty.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -72,6 +73,8 @@ public class TextEditActivity extends ActivityEx {
 			description = "";
 		}
 		check = this.getIntent().getStringExtra("check");
+		int i = this.getIntent().getIntExtra("length", 100);
+		txtContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(i)});
 		//
 		labTitle.setText(title);
 		txtContent.setText(defaultValue);
