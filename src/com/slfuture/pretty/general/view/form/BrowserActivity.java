@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.slfuture.carrie.base.text.Text;
+import com.slfuture.pluto.js.BridgeWebView;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 import com.slfuture.pluto.view.control.GifView;
@@ -147,6 +148,7 @@ public class BrowserActivity extends ActivityEx {
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 	                startActivity(intent);
 	                browser.pauseTimers();
+	                browser.resumeTimers();
 	                return false;
 	            }
 				else if(url.startsWith("new://")) {
@@ -158,18 +160,19 @@ public class BrowserActivity extends ActivityEx {
 					}
 					startActivity(intent);
 	                browser.pauseTimers();
+	                browser.resumeTimers();
 	                return false;
 				}
-				browser.loadUrl(url);
-	            return true;
+	            return browser.webViewClient.shouldOverrideUrlLoading(view, url);
 			}
 			@Override
 			public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-				super.onReceivedError(view, errorCode, description, failingUrl);
+				browser.webViewClient.onReceivedError(view, errorCode, description, failingUrl);
 				browser.loadUrl("about:blank");
 			}
 			@Override 
-	        public void onPageFinished(WebView view, String url) {  
+	        public void onPageFinished(WebView view, String url) { 
+				browser.webViewClient.onPageFinished(view, url);
 				view.loadUrl("javascript: var allLinks = document.getElementsByTagName('a'); if (allLinks) {var i;for (i=0; i<allLinks.length; i++) {var link = allLinks[i];var target = link.getAttribute('target'); if (target && target == '_blank') {link.setAttribute('target','_self');link.href = 'new://'+link.href;}}}"); 
 			}
 		});

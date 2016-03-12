@@ -11,12 +11,13 @@
 		android:background="@color/main">
 		<ImageView
             android:id="@+id/browser_image_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="0dp"
             android:layout_centerVertical="true"
-            android:background="@drawable/arrow_left" />
+            android:scaleType="fitXY"
+            android:background="@drawable/arrow_left_white_wide" />
         <TextView
             android:id="@+id/browser_label_close"
             android:layout_width="wrap_content"
