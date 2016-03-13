@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.slfuture.carrie.base.text.Text;
-import com.slfuture.pluto.js.BridgeWebView;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.ActivityEx;
 import com.slfuture.pluto.view.control.GifView;
@@ -118,19 +117,6 @@ public class BrowserActivity extends ActivityEx {
 	 */
 	public void prepareData() {
 		this.url = this.getIntent().getStringExtra("url");
-		Bundle bundle = this.getIntent().getBundleExtra("handler");
-		if(null == bundle) {
-			return;
-		}
-		int i = 0;
-		while(true) {
-			if(!bundle.containsKey(String.valueOf(i))) {
-				break;
-			}
-			IBrowserHandler handler = (IBrowserHandler) bundle.getSerializable(String.valueOf(i));
-			browser.register(handler);
-			i++;
-		}
 	}
 
 	/**
@@ -222,5 +208,18 @@ public class BrowserActivity extends ActivityEx {
 		browser.setVisibility(View.INVISIBLE);
 		browser.loadUrl(url);
 		browser.register();
+		Bundle bundle = this.getIntent().getBundleExtra("handler");
+		if(null == bundle) {
+			return;
+		}
+		int i = 0;
+		while(true) {
+			if(!bundle.containsKey(String.valueOf(i))) {
+				break;
+			}
+			IBrowserHandler handler = (IBrowserHandler) bundle.getSerializable(String.valueOf(i));
+			browser.register(handler);
+			i++;
+		}
 	}
 }
