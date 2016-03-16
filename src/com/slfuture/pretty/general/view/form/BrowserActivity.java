@@ -79,6 +79,12 @@ public class BrowserActivity extends ActivityEx {
 		load();
 	}
 
+	@Override
+	public void onStop() {
+		browser.loadUrl("about:blank");
+		super.onStop();
+	}
+
 	/**
 	 * 准备
 	 */
