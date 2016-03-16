@@ -2,6 +2,7 @@ package com.slfuture.pretty.im.utility.message;
 
 import java.io.File;
 
+import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.VoiceMessageBody;
 import com.slfuture.pretty.im.utility.message.core.IMessage;
@@ -60,6 +61,7 @@ public class VoiceMessage extends Message {
 		this.hasListened = hasListened;
 		if(null != emMessage) {
 			emMessage.setListened(hasListened);
+			EMChatManager.getInstance().setMessageListened(emMessage);
 		}
 	}
 

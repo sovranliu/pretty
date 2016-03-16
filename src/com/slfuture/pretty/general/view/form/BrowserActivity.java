@@ -80,9 +80,9 @@ public class BrowserActivity extends ActivityEx {
 	}
 
 	@Override
-	public void onStop() {
+	public void onDestroy() {
 		browser.loadUrl("about:blank");
-		super.onStop();
+		super.onDestroy();
 	}
 
 	/**
