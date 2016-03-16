@@ -62,7 +62,7 @@
 		    android:layout_marginRight="5dp"
 		    android:scaleType="fitXY"
 		    android:background="@drawable/messagesright_bg"
-		    android:src="@drawable/chat_picture" />
+		    android:src="@drawable/box" />
 	</RelativeLayout>
 	<RelativeLayout
 	    android:id="@+id/messagesright_layout_voice"

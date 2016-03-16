@@ -62,7 +62,7 @@
 			android:paddingLeft="14dp"
 		    android:scaleType="fitXY"
 		    android:background="@drawable/messagesleft_bg"
-		    android:src="@drawable/chat_picture" />
+		    android:src="@drawable/box" />
 	</RelativeLayout>
 	<RelativeLayout
 	    android:id="@+id/messagesleft_layout_voice"

@@ -237,6 +237,7 @@ public class ChatMessagesFragment extends FragmentEx {
 			layoutImage.setVisibility(View.VISIBLE);
 			layoutVoice.setVisibility(View.GONE);
 			//
+			image.setImageBitmap(null);
 			ImageMessage imageMessage = (ImageMessage) message;
 			if(null != imageMessage.thumbnail) {
 				readerImage(imageMessage.thumbnail);
