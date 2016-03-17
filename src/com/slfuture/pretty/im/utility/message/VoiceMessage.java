@@ -12,7 +12,7 @@ import com.slfuture.pretty.im.utility.message.core.IMessage;
  */
 public class VoiceMessage extends Message {
 	/**
-	 * 音频长度（毫秒）
+	 * 音频长度（秒）
 	 */
 	public int length = 0;
 	/**

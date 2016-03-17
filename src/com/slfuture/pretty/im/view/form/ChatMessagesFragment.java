@@ -343,7 +343,7 @@ public class ChatMessagesFragment extends FragmentEx {
 				imgIcon.setImageResource(R.drawable.voice_left_stop);
 			}
 			VoiceMessage voiceMessage = (VoiceMessage) message;
-			labLength.setText(String.valueOf(voiceMessage.length / 1000) + "''");
+			labLength.setText(String.valueOf(voiceMessage.length) + "''");
 			if(null == voiceMessage.file) {
 				Host.doFile("", new FileResponse(voiceMessage.url, voiceMessage) {
 					@Override

@@ -256,7 +256,7 @@ public class SingleChatActivity extends ActivityEx {
 					message.orientation = IMessage.ORIENTATION_SEND;
 					message.time = DateTime.now();
 					message.file = file;
-					message.length = (int) recorder.duration();
+					message.length = (int) (recorder.duration() / 1000);
 					send(message);
 				}
 				else if(MotionEvent.ACTION_OUTSIDE == action) {
