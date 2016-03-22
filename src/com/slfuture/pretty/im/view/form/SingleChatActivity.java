@@ -18,6 +18,7 @@ import com.slfuture.pretty.im.utility.message.TextMessage;
 import com.slfuture.pretty.im.utility.message.core.IMessage;
 import com.slfuture.pretty.im.view.form.ChatMessagesFragment.IChatMessageAdapter;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
@@ -26,9 +27,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -96,6 +102,7 @@ public class SingleChatActivity extends ActivityEx {
 	public ChatEmoticonFragment frgChatEmoticon = null;
 	public ChatMessagesFragment frgChatMessages = null;
 	
+	public AlertDialog dialog = null;
 	public SoundRecorder recorder = null;
 	public EMConversation conversation = null;
 	public MessageBroadcastReceiver receiver = null;
@@ -239,9 +246,16 @@ public class SingleChatActivity extends ActivityEx {
 				if(MotionEvent.ACTION_DOWN == action) {
 					recorder.start(SingleChatActivity.this);
 					btnVoice.setText("松开发送");
+					if(null == dialog) {
+						dialog = showRecording(SingleChatActivity.this);
+					}
 				}
 				else if(MotionEvent.ACTION_UP == action) {
 					btnVoice.setText("按住说话");
+					if(null != dialog) {
+						dialog.cancel();
+						dialog = null;
+					}
 					File file = recorder.stop();
 					if(null == file) {
 						return false;
@@ -275,12 +289,12 @@ public class SingleChatActivity extends ActivityEx {
 			        FragmentTransaction transaction = fm.beginTransaction();
 			        frgChatEmoticon = new ChatEmoticonFragment() {
 						@Override
-						public void onChoose(int index) {
+						public void onChoose(String emoticon) {
 							TextMessage message = new TextMessage();
 							message.from = selfId;
 							message.orientation = IMessage.ORIENTATION_SEND;
 							message.time = DateTime.now();
-							message.text = "/" + index;
+							message.text = "[" + emoticon + "]";
 							send(message);
 							//
 							if(null != frgChatEmoticon) {
@@ -500,5 +514,29 @@ public class SingleChatActivity extends ActivityEx {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 打开单选框
+	 * 
+	 * @param context 上下文
+	 */
+	public static AlertDialog showRecording(Context context) {
+		final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+		alertDialog.show();
+		Window window = alertDialog.getWindow();
+		WindowManager.LayoutParams layoutParams = window.getAttributes();
+		layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		window.setGravity(Gravity.CENTER);
+		window.setAttributes(layoutParams);
+		window.setContentView(R.layout.dialog_recording);
+		ViewGroup background = (ViewGroup) window.findViewById(R.id.waiting_layout_background);
+		background.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+		return alertDialog;
 	}
 }

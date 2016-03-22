@@ -3,7 +3,6 @@ package com.slfuture.pretty.im.view.form;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.slfuture.carrie.base.text.Text;
 import com.slfuture.pluto.etc.GraphicsHelper;
 import com.slfuture.pluto.view.annotation.ResourceView;
 import com.slfuture.pluto.view.component.FragmentEx;
@@ -29,8 +28,13 @@ public abstract class ChatEmoticonFragment extends FragmentEx {
 	 * 自定义表情位图
 	 */
 	public final static int[] EMOTICON_IMAGE = {R.drawable.emoticon_1, R.drawable.emoticon_2, R.drawable.emoticon_3, R.drawable.emoticon_4, R.drawable.emoticon_5, R.drawable.emoticon_6, R.drawable.emoticon_7, R.drawable.emoticon_8, R.drawable.emoticon_9, R.drawable.emoticon_10, R.drawable.emoticon_11, R.drawable.emoticon_12, R.drawable.emoticon_13, R.drawable.emoticon_14, R.drawable.emoticon_15, R.drawable.emoticon_16};
-
-
+	/**
+	 * 自定义表情文字
+	 */
+	public final static String[] EMOTICON_WORD = {"问好","无语","黑脸","鄙视","失落","汗颜","好色","贱笑","开心","痛哭","嘻嘻","亲亲","挖鼻","笑脸","不屑","挥手"};
+	/**
+	 * 表格
+	 */
 	@ResourceView(clazz=R.id.class, field="chatemoticon_grid_icon")
 	public GridView gridIcon;
 	/**
@@ -51,15 +55,19 @@ public abstract class ChatEmoticonFragment extends FragmentEx {
 			return message;
 		}
 		String text = ((TextMessage) message).text;
-		if(!text.startsWith("/")) {
+		if(!text.startsWith("[") || !text.endsWith("]")) {
 			return message;
 		}
-		text = text.substring(1);
-		if(!Text.isNumber(text) || text.length() > 3) {
-			return message;
+		text = text.substring(1, text.length() - 1);
+		int id = -1;
+		for(int i = 0; i < EMOTICON_WORD.length; i++) {
+			String word = EMOTICON_WORD[i];
+			if(word.equals(text)) {
+				id = i;
+				break;
+			}
 		}
-		int id = Integer.parseInt(text) - 1;
-		if(id > EMOTICON_IMAGE.length || id < 0) {
+		if(-1 == id) {
 			return message;
 		}
 		ImageMessage result = new ImageMessage();
@@ -88,7 +96,6 @@ public abstract class ChatEmoticonFragment extends FragmentEx {
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
     	super.onActivityCreated(savedInstanceState);
-    	//
     	items.clear();
     	for(int i : EMOTICON_IMAGE) {
         	HashMap<String, Object> map = new HashMap<String, Object>();
@@ -105,16 +112,16 @@ public abstract class ChatEmoticonFragment extends FragmentEx {
 		gridIcon.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onChoose(position + 1);
+				onChoose(EMOTICON_WORD[position + 1]);
 			}
 		});
 		adapter.notifyDataSetChanged();
 	}
 
 	/**
-	 * 选择
+	 * 选择一个表情
 	 * 
-	 * @param index 索引
+	 * @param emoticon 表情文字
 	 */
-	public abstract void onChoose(int index);
+	public abstract void onChoose(String emoticon);
 }

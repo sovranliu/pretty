@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.slfuture.carrie.base.time.Date;
 import com.slfuture.carrie.base.type.List;
-import com.slfuture.pluto.communication.Host;
+import com.slfuture.pluto.communication.Networking;
 import com.slfuture.pluto.communication.response.FileResponse;
 import com.slfuture.pluto.communication.response.ImageResponse;
 import com.slfuture.pluto.etc.GraphicsHelper;
@@ -243,7 +243,7 @@ public class ChatMessagesFragment extends FragmentEx {
 				readerImage(imageMessage.thumbnail);
 			}
 			else if(null != imageMessage.thumbnailUrl) {
-				Host.doImage("", new ImageResponse(imageMessage.thumbnailUrl, imageMessage) {
+				Networking.doImage("", new ImageResponse(imageMessage.thumbnailUrl, imageMessage) {
 					@Override
 					public void onFinished(Bitmap content) {
 						((ImageMessage) tag).thumbnail = content;
@@ -258,7 +258,7 @@ public class ChatMessagesFragment extends FragmentEx {
 				imageMessage.original = readerImage(imageMessage.originalFile);
 			}
 			else if(null != imageMessage.originalUrl) {
-				Host.doImage("", new ImageResponse(imageMessage.originalUrl, imageMessage) {
+				Networking.doImage("", new ImageResponse(imageMessage.originalUrl, imageMessage) {
 					@Override
 					public void onFinished(Bitmap content) {
 						((ImageMessage) tag).thumbnail = content;
@@ -345,7 +345,7 @@ public class ChatMessagesFragment extends FragmentEx {
 			VoiceMessage voiceMessage = (VoiceMessage) message;
 			labLength.setText(String.valueOf(voiceMessage.length) + "''");
 			if(null == voiceMessage.file) {
-				Host.doFile("", new FileResponse(voiceMessage.url, voiceMessage) {
+				Networking.doFile("", new FileResponse(voiceMessage.url, voiceMessage) {
 					@Override
 					public void onFinished(File content) {
 						VoiceMessage voiceMessage = (VoiceMessage) tag;

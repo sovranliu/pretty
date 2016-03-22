@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 
-import com.slfuture.pluto.communication.Host;
+import com.slfuture.pluto.communication.Networking;
 import com.slfuture.pluto.communication.response.ImageResponse;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pluto.etc.GraphicsHelper;
@@ -62,7 +62,7 @@ public class ImageActivity extends ActivityEx {
 		}
 		if(null != url) {
 			showWaiting();
-			Host.doImage("", new ImageResponse(url) {
+			Networking.doImage("", new ImageResponse(url) {
 				@Override
 				public void onFinished(Bitmap content) {
 					if(null != alertDialog) {
