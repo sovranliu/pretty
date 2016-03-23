@@ -112,7 +112,7 @@ public abstract class ChatEmoticonFragment extends FragmentEx {
 		gridIcon.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onChoose(EMOTICON_WORD[position + 1]);
+				onChoose(EMOTICON_WORD[position]);
 			}
 		});
 		adapter.notifyDataSetChanged();
