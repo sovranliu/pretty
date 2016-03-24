@@ -175,7 +175,7 @@ public class RingActivity extends ActivityEx {
 		});
 		Bitmap bitmap = Module.reactor.getPhoto(from);
 		if(null != bitmap) {
-			imgPhoto.setImageBitmap(GraphicsHelper.makeCornerImage(Module.reactor.getPhoto(from), 10));
+			imgPhoto.setImageBitmap(GraphicsHelper.makeCycleImage(Module.reactor.getPhoto(from), 200, 200));
 		}
 		labName.setText(Module.reactor.getName(from));
 		if(Module.DIAL_TYPE_AUDIO == dialType) {
