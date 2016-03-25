@@ -26,6 +26,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.OnNotificationClickListener;
 import com.slfuture.carrie.base.model.core.IEventable;
 import com.slfuture.carrie.base.type.Table;
+import com.slfuture.pluto.communication.Networking;
 import com.slfuture.pluto.etc.Controller;
 import com.slfuture.pretty.im.core.IReactor;
 import com.slfuture.pretty.im.view.form.RingActivity;
@@ -81,6 +82,10 @@ public class Module {
      */
 	public static boolean initialize() {
 		EMChat.getInstance().init(context);
+		String imKey = Networking.fetchParameter("imkey");
+		if(null != imKey) {
+			EMChat.getInstance().setAppkey(imKey);
+		}
 		EMChat.getInstance().setDebugMode(true);
 		EMChat.getInstance().setAutoLogin(false);
 		//
