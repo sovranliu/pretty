@@ -165,6 +165,13 @@ public class BrowserActivity extends ActivityEx {
 			@Override 
 	        public void onPageFinished(WebView view, String url) { 
 				browser.webViewClient.onPageFinished(view, url);
+				if(Text.isBlank(view.getTitle()) || "HIDE".equalsIgnoreCase(view.getTitle())) {
+                	header.setVisibility(View.GONE);
+                }
+                else {
+                	header.setVisibility(View.VISIBLE);
+                	labTitle.setText(view.getTitle());
+                }
 				view.loadUrl("javascript: var allLinks = document.getElementsByTagName('a'); if (allLinks) {var i;for (i=0; i<allLinks.length; i++) {var link = allLinks[i];var target = link.getAttribute('target'); if (target && target == '_blank') {link.setAttribute('target','_self');link.href = 'new://'+link.href;}}}"); 
 			}
 		});
