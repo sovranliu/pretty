@@ -30,6 +30,10 @@ public class EnvironmentActivity extends RadioActivity {
 			}
 			i++;
 		}
+		array.add("debug");
+		if(Networking.mock) {
+			current = i;
+		}
 		String[] items = array.toArray(new String[0]);
 		i = 0;
 		for(String item : items) {
@@ -53,7 +57,13 @@ public class EnvironmentActivity extends RadioActivity {
 		if(-1 == index) {
 			return;
 		}
-		Networking.selectEnvironment(EnvironmentActivity.this, Networking.environments.get(index).name);
+		if(index == Networking.environments.size()) {
+			Networking.selectMock(EnvironmentActivity.this, true);
+		}
+		else {
+			Networking.selectMock(EnvironmentActivity.this, false);
+			Networking.selectEnvironment(EnvironmentActivity.this, Networking.environments.get(index).name);
+		}
 		super.onSelect(index);
 	}
 }
