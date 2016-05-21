@@ -83,7 +83,7 @@ public class Module {
 	public static boolean initialize() {
 		EMChat.getInstance().init(context);
 		String imKey = Networking.fetchParameter("imkey");
-		if(null != imKey) {
+		if(!Networking.mock && null != imKey) {
 			EMChat.getInstance().setAppkey(imKey);
 		}
 		EMChat.getInstance().setDebugMode(true);
@@ -117,11 +117,13 @@ public class Module {
            		else if("video".equals(type)) {
            			dialType = Module.DIAL_TYPE_VIDEO;
            		}
-           		Intent ringIntent = new Intent(context, RingActivity.class);
-           		ringIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-           		ringIntent.putExtra("type", dialType);
-           		ringIntent.putExtra("from", from);
-           		context.startActivity(ringIntent);
+				if(reactor.onDial(dialType)) {
+	           		Intent ringIntent = new Intent(context, RingActivity.class);
+	           		ringIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+	           		ringIntent.putExtra("type", dialType);
+	           		ringIntent.putExtra("from", from);
+	           		context.startActivity(ringIntent);
+				}
            	}
         };
         context.registerReceiver(dialReceiver, new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction()));

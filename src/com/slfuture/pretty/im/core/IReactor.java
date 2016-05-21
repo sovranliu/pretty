@@ -44,6 +44,13 @@ public interface IReactor {
 	public void onConflict();
 
 	/**
+	 * 通话回调
+	 * 
+	 * @param type 通话类型
+	 */
+	public boolean onDial(int type);
+
+	/**
 	 * 透传命令回调
 	 * 
 	 * @param from 消息投递者
